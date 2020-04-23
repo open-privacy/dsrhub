@@ -1,0 +1,10 @@
+version: "3"
+
+services:
+  swagger-openmock:
+    image: checkr/openmock
+    restart: on-failure
+    volumes:
+      - "./mocks/swagger/templates:/data/templates"
+    ports:
+      - "9999:9999"
