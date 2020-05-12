@@ -1,6 +1,55 @@
 version: "3"
 
 services:
+  # temporal.io
+  mysql:
+    image: mysql:5.7
+    restart: on-failure
+    ports:
+      - "3306:3306"
+    environment:
+      - "MYSQL_ROOT_PASSWORD=root"
+  statsd:
+    image: graphiteapp/graphite-statsd
+    restart: on-failure
+    ports:
+      - "8080:80"
+      - "2003:2003"
+      - "8125:8125"
+      - "8126:8126"
+  temporal:
+    image: temporalio/auto-setup:0.21.1
+    restart: on-failure
+    ports:
+     - "7233:7233"
+     - "7234:7234"
+     - "7235:7235"
+     - "7239:7239"
+     - "6933:6933"
+     - "6934:6934"
+     - "6935:6935"
+     - "6939:6939"
+    environment:
+      - "DB=mysql"
+      - "MYSQL_USER=root"
+      - "MYSQL_PWD=root"
+      - "MYSQL_SEEDS=mysql"
+      - "STATSD_ENDPOINT=statsd:8125"
+      - "DYNAMIC_CONFIG_FILE_PATH=config/dynamicconfig/development.yaml"
+    depends_on:
+      - mysql
+      - statsd
+  temporal-web:
+    image: temporalio/web:0.21.1
+    restart: on-failure
+    environment:
+      - "TEMPORAL_GRPC_ENDPOINT=temporal:7233"
+    ports:
+      - "8088:8088"
+    depends_on:
+      - temporal
+
+  # mocks
   swagger-openmock:
     image: checkr/openmock
     restart: on-failure
