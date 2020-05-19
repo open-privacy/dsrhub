@@ -5,10 +5,16 @@
 github.com/asaskevich/govalidator
 # github.com/aws/aws-sdk-go v1.30.29
 ## explicit
+# github.com/caarlos0/env v3.5.0+incompatible
+## explicit
+github.com/caarlos0/env
 # github.com/disintegration/imaging v1.6.2
 ## explicit
 # github.com/fatih/color v1.9.0
 ## explicit
+# github.com/google/uuid v1.1.1
+## explicit
+github.com/google/uuid
 # github.com/gorilla/context v1.1.1
 ## explicit
 github.com/gorilla/context
@@ -76,6 +82,9 @@ github.com/qor/transition
 github.com/qor/validations
 # github.com/rainycape/unidecode v0.0.0-20150907023854-cb7f23ec59be
 github.com/rainycape/unidecode
+# github.com/spf13/cast v1.3.1
+## explicit
+github.com/spf13/cast
 # github.com/theplant/cldr v0.0.0-20190423050709-9f76f7ce4ee8
 ## explicit
 github.com/theplant/cldr
@@ -85,8 +94,28 @@ github.com/theplant/cldr
 ## explicit
 # github.com/yosssi/gohtml v0.0.0-20200512035251-dd92a3e0d30d
 ## explicit
+# go.uber.org/atomic v1.6.0
+go.uber.org/atomic
+# go.uber.org/multierr v1.5.0
+go.uber.org/multierr
+# go.uber.org/zap v1.15.0
+## explicit
+go.uber.org/zap
+go.uber.org/zap/buffer
+go.uber.org/zap/internal/bufferpool
+go.uber.org/zap/internal/color
+go.uber.org/zap/internal/exit
+go.uber.org/zap/zapcore
+# golang.org/x/crypto v0.0.0-20191205180655-e7c4368fe9dd
+## explicit
+golang.org/x/crypto/internal/subtle
+golang.org/x/crypto/nacl/secretbox
+golang.org/x/crypto/poly1305
+golang.org/x/crypto/salsa20/salsa
 # golang.org/x/net v0.0.0-20200202094626-16171245cfb2
 golang.org/x/net/html
 golang.org/x/net/html/atom
+# golang.org/x/sys v0.0.0-20191026070338-33540a1f6037
+golang.org/x/sys/cpu
 # gopkg.in/check.v1 v1.0.0-20200227125254-8fa46927fb4f
 ## explicit

@@ -3,17 +3,17 @@ package model
 import (
 	"time"
 
-	"github.com/qor/transition"
+	"github.com/google/uuid"
+	"github.com/jinzhu/gorm"
 )
 
 type BaseModel struct {
-	ID                 string     `gorm:"primary_key,type:char(36)"`
-	CreatedAt          time.Time  `sql:"index"`
-	UpdatedAt          time.Time  `sql:"index"`
-	DeletedAt          *time.Time `sql:"index"`
-	EncryptionScopeKey string
+	ID        string     `gorm:"primary_key,type:char(36)"`
+	CreatedAt time.Time  `gorm:"index"`
+	UpdatedAt time.Time  `gorm:"index"`
+	DeletedAt *time.Time `gorm:"index"`
 }
 
-type Dag struct {
-	transition.Transition
+func (base *BaseModel) BeforeCreate(scope *gorm.Scope) error {
+	return scope.SetColumn("ID", uuid.New().String())
 }
