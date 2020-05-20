@@ -27,7 +27,7 @@ func (as *AdminServer) Start() error {
 }
 
 func (as *AdminServer) Teardown() {
-	return
+	// TODO
 }
 
 func (as *AdminServer) prepare() error {

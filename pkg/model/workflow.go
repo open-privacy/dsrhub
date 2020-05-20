@@ -3,10 +3,11 @@ package model
 import "github.com/qor/transition"
 
 const (
-	WORKFLOW_STATE_CREATED   = "@created"
-	WORKFLOW_STATE_COMPLETED = "@completed"
-	WORKFLOW_STATE_FAILED    = "@failed"
-	WORKFLOW_STATE_CANCELLED = "@cancelled"
+	WorkflowStateCreated   = "@created"
+	WorkflowStateSuccess   = "@success"
+	WorkflowStateFailed    = "@failed"
+	WorkflowStateTimeout   = "@timeout"
+	WorkflowStateCancelled = "@cancelled"
 )
 
 type Workflow struct {
@@ -35,11 +36,12 @@ type Workflow struct {
 func (w *Workflow) Prepare() {
 	// prepare fsm
 	fsm := transition.New(&Workflow{})
-	fsm.State(WORKFLOW_STATE_CREATED)
-	fsm.State(WORKFLOW_STATE_COMPLETED)
-	fsm.State(WORKFLOW_STATE_FAILED)
-	fsm.State(WORKFLOW_STATE_CANCELLED)
-	fsm.Initial(WORKFLOW_STATE_CREATED)
+	fsm.State(WorkflowStateCreated)
+	fsm.State(WorkflowStateSuccess)
+	fsm.State(WorkflowStateFailed)
+	fsm.State(WorkflowStateTimeout)
+	fsm.State(WorkflowStateCancelled)
+	fsm.Initial(WorkflowStateCreated)
 	w.FSM = fsm
 
 	// TODO: prepare tasks and their dependencies

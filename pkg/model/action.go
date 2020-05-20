@@ -6,14 +6,12 @@ import (
 )
 
 const (
-	ACTION_TYPE            = "type"
-	ACTION_TYPE_SYNC_HTTP  = "sync_http"
-	ACTION_TYPE_ASYNC_HTTP = "async_http"
+	ActionType          = "type"
+	ActionTypeSyncHTTP  = "sync_http"
+	ActionTypeAsyncHTTP = "async_http"
 )
 
 var (
-	errEmptyAction       = errors.New("empty action")
-	errEmptyActionType   = errors.New("empty action type")
 	errInvalidActionType = errors.New("invalid action type")
 )
 
@@ -23,9 +21,9 @@ type Actionable interface {
 
 func NewActionable(action string) (Actionable, error) {
 	switch action {
-	case ACTION_TYPE_SYNC_HTTP:
+	case ActionTypeSyncHTTP:
 		return &ActionSyncHTTP{}, nil
-	case ACTION_TYPE_ASYNC_HTTP:
+	case ActionTypeAsyncHTTP:
 		return &ActionAsyncHTTP{}, nil
 	default:
 		return nil, errInvalidActionType

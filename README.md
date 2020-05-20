@@ -5,7 +5,7 @@
         <img src="https://goreportcard.com/badge/github.com/dsrhub/dsrhub">
     </a>
     <a href="https://circleci.com/gh/dsrhub/dsrhub" target="_blank">
-        <img src="https://circleci.com/gh/dsrhub/dsrhub?style=shield">
+        <img src="https://circleci.com/gh/dsrhub/dsrhub.svg?style=shield">
     </a>
     <a href="https://godoc.org/github.com/dsrhub/dsrhub" target="_blank">
         <img src="https://img.shields.io/badge/godoc-reference-green.svg">
