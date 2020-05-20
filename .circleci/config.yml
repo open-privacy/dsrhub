@@ -1,0 +1,15 @@
+version: 2
+jobs:
+  unittest:
+    docker:
+      - image: circleci/golang:1.14
+    working_directory: /app
+    steps:
+      - checkout
+      - run: make test
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - unittest

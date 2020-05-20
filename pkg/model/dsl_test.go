@@ -8,6 +8,6 @@ import (
 
 func TestDSLLoad(t *testing.T) {
 	dsl := &DSL{}
-	err := dsl.Load("./testdata/demo_dsl.yaml")
+	err := dsl.Load("./testdata/test_dsl.yaml")
 	assert.NoError(t, err)
 }
