@@ -3,8 +3,6 @@ package model
 import (
 	"context"
 	"errors"
-
-	"github.com/spf13/cast"
 )
 
 const (
@@ -23,16 +21,8 @@ type Actionable interface {
 	Act(ctx context.Context, task *Task) error
 }
 
-func NewActionable(action KV) (Actionable, error) {
-	if action == nil {
-		return nil, errEmptyAction
-	}
-	v, ok := action[ACTION_TYPE]
-	if !ok {
-		return nil, errEmptyActionType
-	}
-	aType := cast.ToString(v)
-	switch aType {
+func NewActionable(action string) (Actionable, error) {
+	switch action {
 	case ACTION_TYPE_SYNC_HTTP:
 		return &ActionSyncHTTP{}, nil
 	case ACTION_TYPE_ASYNC_HTTP:

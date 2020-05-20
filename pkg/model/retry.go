@@ -8,8 +8,8 @@ import (
 )
 
 type Retry struct {
-	Count int
-	Delay int // delay in seconds
+	Count int `yaml:"count"`
+	Delay int `yaml:"delay"` // delay in seconds
 }
 
 func (r *Retry) Scan(value interface{}) error {

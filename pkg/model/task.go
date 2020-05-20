@@ -14,32 +14,40 @@ type Task struct {
 	BaseModel
 	transition.Transition
 
-	WorkflowID string `gorm:"type:char(36)"`
-	Workflow   *Workflow
-	Requires   []*Task `gorm:"many2many:task_requires;association_jointable_foreignkey:require_id"`
-
 	Name        string
 	Description string
-	Input       EncryptionKV `gorm:"type:varchar(65532)"`
-	Output      EncryptionKV `gorm:"type:varchar(1000000)"`
-	Action      KV           `gorm:"type:varchar(65532)"`
-	Publish     KV           `gorm:"type:varchar(65532)"`
-	Retry       Retry        `gorm:"type:varchar(65532)"`
-	ScopeID     string
-	Timeout     int // timeout in seconds
+	Timeout     int    // timeout in seconds
+	Action      string `gorm:"type:varchar(65532)"`
+	Input       KV     `gorm:"type:varchar(65532)"`
+	Publish     KV     `gorm:"type:varchar(65532)"`
+	Retry       Retry  `gorm:"type:varchar(65532)"`
 
-	// gorm ignored
-	FSM         *transition.StateMachine `gorm:"-"`
-	RequiresMap map[string]*Task         `gorm:"-"`
+	// -------- yaml ignored --------------------------------------------------
+	ScopeID       string       `yaml:"-"`
+	WorkflowID    string       `gorm:"type:char(36)" yaml:"-"`
+	Workflow      *Workflow    `yaml:"-"`
+	Output        EncryptionKV `gorm:"type:varchar(1000000)" yaml:"-"`
+	RenderedInput EncryptionKV `gorm:"type:varchar(65532)" yaml:"-"`
+	RequiresList  []*Task      `gorm:"many2many:task_requires;association_jointable_foreignkey:require_task_id" yaml:"-"`
+	// ------------------------------------------------------------------------
+
+	// -------- gorm ignored --------------------------------------------------
+	Requires []string `gorm:"-"` // list of the task names that the task requires
+	// ------------------------------------------------------------------------
+
+	// ---------gorm and yaml ignored -----------------------------------------
+	FSM *transition.StateMachine `gorm:"-" yaml:"-"`
+	// ------------------------------------------------------------------------
 
 	// private
 	actionable Actionable `gorm:"-"`
 }
 
 const (
-	TASK_STATE_CREATED   = "created"
-	TASK_STATE_COMPLETED = "completed"
-	TASK_STATE_CANCELLED = "cancelled"
+	TASK_STATE_CREATED   = "@created"
+	TASK_STATE_COMPLETED = "@completed"
+	TASK_STATE_FAILED    = "@failed"
+	TASK_STATE_CANCELLED = "@cancelled"
 )
 
 func (t *Task) Prepare() error {
@@ -47,6 +55,7 @@ func (t *Task) Prepare() error {
 	fsm := transition.New(&Task{})
 	fsm.State(TASK_STATE_CREATED)
 	fsm.State(TASK_STATE_COMPLETED)
+	fsm.State(TASK_STATE_FAILED)
 	fsm.State(TASK_STATE_CANCELLED)
 	fsm.Initial(TASK_STATE_CREATED)
 	t.FSM = fsm
