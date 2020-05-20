@@ -1,0 +1,55 @@
+version: '1.0'
+workflows:
+  demo_workflow_1:
+    name: demo_workflow_1
+    description: demo the first workflow
+    timeout: 60 # seconds
+    input:
+      hello: world
+    tasks:
+      task_1:
+        action: sync_http
+        input:
+          url: 'https://httpbin.org/get'
+          method: GET
+        timeout: 5
+      task_2:
+        action: sync_http
+        input:
+          url: 'https://httpbin.org/post'
+          method: POST
+        timeout: 5
+        requires:
+          - task_1
+      task_3:
+        action: async_http
+        input:
+          url: 'http://localhost:9999/async_http_callback'
+          method: POST
+          webhook_condition: '{{ .Output.Webhook.ResponseBody | jsonPath "subject_request_id" | eq .WorkflowID }}'
+        publish:
+          subject_request_id: '{{ .Output.Webhook.ResponseBody | jsonPath "subject_request_id" }}'
+          request_status: '{{ .Output.Webhook.ResponseBody | jsonPath "request_status" }}'
+        timeout: 5
+        requires:
+          - task_1
+          - task_2
+      task_4:
+        action: async_http
+        input:
+          url: 'http://localhost:9999/async_http_polling'
+          method: POST
+          polling_url: 'http://localhost:9999/async_http_polling'
+          polling_method: GET
+          polling_condition: '{{ .Output.Polling.ResponseBody | jsonPath "subject_request_id" | eq .WorkflowID }}'
+        publish:
+          subject_request_id: '{{ .Output.Polling.ResponseBody | jsonPath "subject_request_id" }}'
+          request_status: '{{ .Output.Polling.ResponseBody | jsonPath "request_status" }}'
+        timeout: 5
+        requires:
+          - task_1
+          - task_2
+
+
+
+
