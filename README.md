@@ -1,4 +1,4 @@
-<img src="docs/logo.svg" width="100%" height="420">
+<img src="docs/logo.svg" width="100%" height="250">
 
 <p align="center">
     <a href="https://goreportcard.com/report/github.com/dsrhub/dsrhub" target="_blank">
@@ -12,7 +12,9 @@
     </a>
 </p>
 
-# dsrhub
-Open platform for DSR (Data Subject Requests) to orchestrate the workflow for GDPR/CCPA compliance.
+
+
+# Introduction
+DSRHub is an open platform for DSR (Data Subject Requests). It helps to orchestrate the workflow for GDPR/CCPA compliance.
 
 WIP.
