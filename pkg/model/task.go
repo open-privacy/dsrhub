@@ -23,12 +23,12 @@ type Task struct {
 	Retry       Retry  `gorm:"type:varchar(65532)"`
 
 	// -------- yaml ignored --------------------------------------------------
-	ScopeID       string       `yaml:"-"`
 	WorkflowID    string       `gorm:"type:char(36)" yaml:"-"`
 	Workflow      *Workflow    `yaml:"-"`
 	Output        EncryptionKV `gorm:"type:varchar(1000000)" yaml:"-"`
 	RenderedInput EncryptionKV `gorm:"type:varchar(65532)" yaml:"-"`
 	RequiresList  []*Task      `gorm:"many2many:task_requires;association_jointable_foreignkey:require_task_id" yaml:"-"`
+	ScopeID       string       `gorm:"index" yaml:"-"`
 	// ------------------------------------------------------------------------
 
 	// -------- gorm ignored --------------------------------------------------

@@ -15,7 +15,6 @@ type Workflow struct {
 
 	Name        string `gorm:"index"`
 	Description string
-	Input       KV  `gorm:"type:varchar(65532)"`
 	Timeout     int // timeout in seconds
 
 	// -------- yaml ignored --------------------------------------------------
