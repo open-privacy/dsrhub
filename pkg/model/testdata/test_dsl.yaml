@@ -24,7 +24,7 @@ workflows:
         input:
           url: 'http://localhost:9999/async_http_callback'
           method: POST
-          wait_for:
+          await:
             http_listen:
               condition: '{{ .Output.HTTPListenRequestBody | jsonPath "subject_request_id" | eq .WorkflowID }}'
         publish:
@@ -39,7 +39,7 @@ workflows:
         input:
           url: 'http://localhost:9999/async_http_polling'
           method: POST
-          wait_for:
+          await:
             http_polling:
               condition: '{{ .Output.HTTPPollingResponseBody | jsonPath "subject_request_id" | eq .WorkflowID }}'
               url: 'http://localhost:9999/async_http_polling'
