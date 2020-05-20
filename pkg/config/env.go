@@ -11,7 +11,7 @@ var ENV = struct {
 	LoggerEnv  string   `env:"DSRHUB_LOGGER_ENV" envDefault:"production"`
 
 	AdminServerHostPort string `env:"DSRHUB_ADMIN_SERVER_HOST_PORT" envDefault:"localhost:28001"`
-	ApiServerHostPort   string `env:"DSRHUB_API_SERVER_HOST_PORT" envDefault:"localhost:28000"`
+	APIServerHostPort   string `env:"DSRHUB_API_SERVER_HOST_PORT" envDefault:"localhost:28000"`
 
 	DBDriver                  string        `env:"DSRHUB_DB_DRIVER" envDefault:"sqlite3"`
 	DBConnectionStr           string        `env:"DSRHUB_DB_CONNECTION_STR" envDefault:":memory:"`

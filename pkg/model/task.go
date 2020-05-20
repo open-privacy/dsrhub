@@ -44,20 +44,21 @@ type Task struct {
 }
 
 const (
-	TASK_STATE_CREATED   = "@created"
-	TASK_STATE_COMPLETED = "@completed"
-	TASK_STATE_FAILED    = "@failed"
-	TASK_STATE_CANCELLED = "@cancelled"
+	TaskStateCreated   = "@created"
+	TaskStateSuccess   = "@success"
+	TaskStateFailed    = "@failed"
+	TaskStateTimeout   = "@timeout"
+	TaskStateCancelled = "@cancelled"
 )
 
 func (t *Task) Prepare() error {
 	// prepare fsm
 	fsm := transition.New(&Task{})
-	fsm.State(TASK_STATE_CREATED)
-	fsm.State(TASK_STATE_COMPLETED)
-	fsm.State(TASK_STATE_FAILED)
-	fsm.State(TASK_STATE_CANCELLED)
-	fsm.Initial(TASK_STATE_CREATED)
+	fsm.State(TaskStateCreated)
+	fsm.State(TaskStateSuccess)
+	fsm.State(TaskStateFailed)
+	fsm.State(TaskStateTimeout)
+	fsm.Initial(TaskStateCreated)
 	t.FSM = fsm
 
 	// prepare actionable
