@@ -1,0 +1,90 @@
+name: example-simple-http
+title_format: Example of a simple HTTP workflow
+description: Example of a simple HTTP workflow
+auto_runnable: true
+
+inputs:
+- name: user_id
+  description: User ID
+
+steps:
+  getTime:
+    description: Get UTC time
+    action:
+      type: http
+      configuration:
+        url: http://worldclockapi.com/api/json/utc/now
+        method: GET
+  getUser:
+    description: Get user
+    dependencies: ["getTime"]
+    custom_states: [NOT_FOUND]
+    action:
+      type: http
+      configuration:
+        url: http://openmock:9999/users/not_found
+        method: GET
+    conditions:
+    - type: check
+      if:
+      - value: '{{.step.getUser.metadata.HTTPStatus}}'
+        operator: EQ
+        expected: '404'
+      then:
+        this: NOT_FOUND
+      message: 'User {{.input.user_id}} not found'
+  createUser:
+    description: Create the user
+    dependencies: ["getUser:NOT_FOUND"]
+    action:
+      type: http
+      configuration:
+        url: http://openmock:9999/users
+        method: POST
+        body: |-
+          {"user_id":"{{.input.user_id}}"}
+  getUserCopy:
+    description: Get user
+    dependencies: ["getTime"]
+    custom_states: [NOT_FOUND]
+    action:
+      type: http
+      configuration:
+        url: http://openmock:9999/users/not_found
+        method: GET
+    conditions:
+    - type: check
+      if:
+      - value: '{{.step.getUserCopy.metadata.HTTPStatus}}'
+        operator: EQ
+        expected: '404'
+      then:
+        this: NOT_FOUND
+      message: 'User {{.input.user_id}} not found'
+  createUserCopy:
+    description: Create the user
+    dependencies: ["getUserCopy:NOT_FOUND"]
+    action:
+      type: http
+      configuration:
+        url: http://openmock:9999/users
+        method: POST
+        body: |-
+          {"user_id":"{{.input.user_id}}"}
+  mapUserIDtoEmail:
+    description: Map user id to email
+    dependencies: ["getTime"]
+    action:
+      type: http
+      configuration:
+        url: http://openmock:9999/users/found
+        method: GET
+  deleteUserEmail:
+    description: Map user id to email
+    dependencies: ["mapUserIDtoEmail"]
+    action:
+      type: http
+      configuration:
+        url: http://openmock:9999/users/email/{{.step.mapUserIDtoEmail.output.user_email}}
+        method: DELETE
+
