@@ -1,7 +1,6 @@
 name: example-dsrhub-workflow
 title_format: DSRHub workflow
 description: DSRHub workflow
-auto_runnable: true
 
 inputs:
 - name: identity_type
@@ -24,6 +23,8 @@ inputs:
 - name: identity_value
   description: Identity Value
   default: zzzz@example.com
+
+resolver_inputs:
 - name: service_b_callback_state
   description: service b callback state
   default: pending
@@ -117,9 +118,10 @@ steps:
       configuration:
         url: 'http://openmock:9999/service_b/users/email/{{.input.identity_value}}'
         method: DELETE
+        body: 'http://utask:8081/resolution/{{.task.resolution_id}}/reinstitute'
         headers:
-        - name: x-utask-id
-          value: '{{.task.task_id}}'
+        - name: x-callback-url
+          value: 'http://utask:8081/resolution/{{.task.resolution_id}}/reinstitute'
   waitServiceBCallback:
     description: Wait for service B callback
     dependencies: ["getTime", "deleteServiceBEmail"]
@@ -127,13 +129,13 @@ steps:
       type: echo
       configuration:
         output:
-          state: '{{.input.service_b_callback_state}}'
+          state: '{{.resolver_input.service_b_callback_state}}'
     conditions:
     - type: check
       if:
-      - value: '{{.input.service_b_callback_state}}'
-        operator: EQ
-        expected: 'pending'
+      - value: '{{.resolver_input.service_b_callback_state}}'
+        operator: NE
+        expected: 'done'
       then:
         this: TO_RETRY
       message: 'service B is pending'

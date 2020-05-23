@@ -69,11 +69,15 @@
     - sleep:
         duration: 5s
     - send_http:
-        url: 'http://utask:8081/{{.HTTPHeader.Get "x-utask-task-id"}}'
-        method: PUT
+        url: '{{.HTTPHeader.Get "x-callback-url"}}'
+        method: POST
+        headers:
+          Authorization: 'Basic YWRtaW46MTIzNA=='
+          Content-Type: 'application/json'
+          Accept: '*/*'
         body: |-
           {
-            "input": {
-              "state": "done"
+            "resolver_inputs": {
+              "service_b_callback_state": "done"
             }
           }
