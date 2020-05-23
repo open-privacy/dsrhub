@@ -1,0 +1,44 @@
+# Related to Golang
+
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# Random files
+/app/app
+vault.json
+/utask
+vaultfile.json
+.DS_Store
+install-utask.sh
+cmd/utask/utask
+
+# Related to UI
+ui/dashboard/dist
+ui/dashboard/coverage
+ui/dashboard/dist.tar.gz
+ui/dashboard/node_modules
+ui/dashboard/src/environments/environment.ts
+ui/editor/dist
+ui/editor/dist.tar.gz
+ui/editor/node_modules
+
+# Related to config
+config/*
+!config/README.md
+
+# Related to scripts
+scripts/*
+!scripts/.gitkeep
+
+# Related to Goreleaser
+dist/

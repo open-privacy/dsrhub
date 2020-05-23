@@ -1,11 +1,32 @@
-name: example-simple-http
-title_format: Example of a simple HTTP workflow
-description: Example of a simple HTTP workflow
+name: example-dsrhub-workflow
+title_format: DSRHub workflow
+description: DSRHub workflow
 auto_runnable: true
 
 inputs:
-- name: user_id
-  description: User ID
+- name: identity_type
+  description: Identity Type
+  default: email
+  legal_values:
+    - email
+    - candidate_id
+    - ios_advertising_id
+    - android_advertising_id
+    - android_id
+- name: identity_format
+  description: Identity Format
+  default: raw
+  legal_values:
+    - md5
+    - raw
+    - sha1
+    - sha256
+- name: identity_value
+  description: Identity Value
+  default: zzzz@example.com
+- name: service_b_callback_state
+  description: service b callback state
+  default: pending
 
 steps:
   getTime:
@@ -32,7 +53,7 @@ steps:
         expected: '404'
       then:
         this: NOT_FOUND
-      message: 'User {{.input.user_id}} not found'
+      message: 'User {{.input.identity_value}} not found'
   createUser:
     description: Create the user
     dependencies: ["getUser:NOT_FOUND"]
@@ -42,7 +63,7 @@ steps:
         url: http://openmock:9999/users
         method: POST
         body: |-
-          {"user_id":"{{.input.user_id}}"}
+          {"email":"{{.input.identity_value}}"}
   getUserCopy:
     description: Get user
     dependencies: ["getTime"]
@@ -60,7 +81,7 @@ steps:
         expected: '404'
       then:
         this: NOT_FOUND
-      message: 'User {{.input.user_id}} not found'
+      message: 'User {{.input.identity_value}} not found'
   createUserCopy:
     description: Create the user
     dependencies: ["getUserCopy:NOT_FOUND"]
@@ -70,21 +91,57 @@ steps:
         url: http://openmock:9999/users
         method: POST
         body: |-
-          {"user_id":"{{.input.user_id}}"}
-  mapUserIDtoEmail:
-    description: Map user id to email
+          {"email":"{{.input.identity_value}}"}
+  mapEmailToCandidateID:
+    description: Map email to candidate_id
     dependencies: ["getTime"]
     action:
       type: http
       configuration:
         url: http://openmock:9999/users/found
         method: GET
-  deleteUserEmail:
-    description: Map user id to email
-    dependencies: ["mapUserIDtoEmail"]
+  deleteServiceA:
+    description: Delete candidate_id from service A
+    dependencies: ["mapEmailToCandidateID"]
     action:
       type: http
       configuration:
-        url: http://openmock:9999/users/email/{{.step.mapUserIDtoEmail.output.user_email}}
+        url: http://openmock:9999/service_a/users/candidate_id/{{.step.mapEmailToCandidateID.output.candidate_id}}
         method: DELETE
 
+  deleteServiceBEmail:
+    description: Delete email from service B
+    dependencies: ["getTime"]
+    action:
+      type: http
+      configuration:
+        url: 'http://openmock:9999/service_b/users/email/{{.input.identity_value}}'
+        method: DELETE
+        headers:
+        - name: x-utask-id
+          value: '{{.task.task_id}}'
+  waitServiceBCallback:
+    description: Wait for service B callback
+    dependencies: ["getTime", "deleteServiceBEmail"]
+    action:
+      type: echo
+      configuration:
+        output:
+          state: '{{.input.service_b_callback_state}}'
+    conditions:
+    - type: check
+      if:
+      - value: '{{.input.service_b_callback_state}}'
+        operator: EQ
+        expected: 'pending'
+      then:
+        this: TO_RETRY
+      message: 'service B is pending'
+  notifyServiceBDeletion:
+    description: notify service B deletion
+    dependencies: ["waitServiceBCallback"]
+    action:
+      type: echo
+      configuration:
+        output:
+          hello: world

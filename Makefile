@@ -11,12 +11,14 @@ ifndef GOLANGCILINT
 	@gobin github.com/golangci/golangci-lint/cmd/golangci-lint@v1.24.0
 endif
 	@golangci-lint run -D errcheck -E golint ./pkg/...
+	@golangci-lint run -D errcheck -E golint ./init/...
+	@golangci-lint run -D errcheck -E golint ./plugins/...
 
 test: lint
 	go test -race -covermode=atomic ./pkg/...
 
-build:
-	go build
+build_plugins:
+	for p in $$(ls ./plugins); do if [ -d ./plugins/$$p ]; then GO111MODULE=on go build --buildmode=plugin -o ./plugins/$$p.so ./plugins/$$p/*.go; fi; done
+	for p in $$(ls ./init);    do if [ -d ./init/$$p ];    then GO111MODULE=on go build --buildmode=plugin -o ./init/$$p.so    ./init/$$p/*.go;    fi; done
 
-local_run: build
-	./dsrhub
+build: build_plugins

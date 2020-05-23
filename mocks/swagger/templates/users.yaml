@@ -1,0 +1,79 @@
+- key: getUsersByIDzzzz
+  kind: Behavior
+  expect:
+    http:
+      method: GET
+      path: /users/found
+  actions:
+    - reply_http:
+        status_code: 200
+        body: >
+          {
+            "candidate_id": "zzzz",
+            "email": "zzzz@example.com"
+          }
+
+- key: getUsersByID
+  kind: Behavior
+  expect:
+    http:
+      method: GET
+      path: /users/not_found
+  actions:
+    - reply_http:
+        status_code: 404
+        body: >
+          {"error": "Not Found"}
+
+- key: postUsers
+  kind: Behavior
+  expect:
+    http:
+      method: POST
+      path: /users
+  actions:
+    - reply_http:
+        status_code: 201
+        body: |-
+          {"candidate_id": "{{ uuidv4 }}"}
+
+- key: service_a/delete_by_candidate_id
+  kind: Behavior
+  expect:
+    http:
+      method: DELETE
+      path: /service_a/users/candidate_id/:candidate_id
+  actions:
+    - reply_http:
+        status_code: 200
+        body: |-
+          {
+            "deleted": true,
+            "candidate_id": "zzzz"
+          }
+
+- key: service_b/delete_by_email_async
+  kind: Behavior
+  expect:
+    http:
+      method: DELETE
+      path: /service_b/users/email/:email
+  actions:
+    - reply_http:
+        status_code: 200
+        body: |-
+          {
+            "state": "pending",
+            "email": "zzzz@example.com"
+          }
+    - sleep:
+        duration: 5s
+    - send_http:
+        url: 'http://utask:8081/{{.HTTPHeader.Get "x-utask-task-id"}}'
+        method: PUT
+        body: |-
+          {
+            "input": {
+              "state": "done"
+            }
+          }
