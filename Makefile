@@ -1,4 +1,4 @@
-GOLANGCILINT := $(shell command -v golangci-lint 2> /dev/null)
+src-dirs = ./pkg/... ./init/... ./plugins/...
 
 .PHONY: vendor
 vendor:
@@ -10,13 +10,13 @@ ifndef GOLANGCILINT
 	@GO111MODULE=off go get -u github.com/myitcv/gobin
 	@gobin github.com/golangci/golangci-lint/cmd/golangci-lint@v1.24.0
 endif
-	@golangci-lint run -D errcheck -E golint ./pkg/...
+	@golangci-lint run -D errcheck -E golint ${src-dirs}
 
 test: lint
-	go test -race -covermode=atomic ./pkg/...
+	go test -race -covermode=atomic ${src-dirs}
 
-build:
-	go build
+docker_build:
+	docker-compose build
 
-local_run: build
-	./dsrhub
+docker_run:
+	docker-compose up --remove-orphans --force-recreate

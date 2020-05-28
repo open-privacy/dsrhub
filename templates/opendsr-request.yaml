@@ -1,0 +1,121 @@
+name: opendsr-request
+title_format: 'opendsr-request {{.input.url}}'
+description: opendsr request
+auto_runnable: true
+result_format:
+  controller_id: >-
+    {{if .input.callback_enabled}}{{field "resolver_input" "callback" "controller_id"}}
+    {{else}}{{.step.request.output.controller_id}}{{- end}}
+  subject_request_id: >-
+    {{if .input.callback_enabled}}{{field "resolver_input" "callback" "subject_request_id"}}
+    {{else}}{{.step.request.output.subject_request_id}}{{- end}}
+  request_status: >-
+    {{if .input.callback_enabled}}{{field "resolver_input" "callback" "request_status"}}
+    {{else}}{{.step.request.output.request_status}}{{- end}}
+  input: '{{.input | toJson}}'
+
+inputs:
+# remote opendsr request
+- name: url
+  description: request url
+  default: 'http://openmock:9999/service-candidate-id/opendsr/requests'
+- name: callback_url_base
+  description: callback url base
+  default: 'http://utask:8081/dsrhub/callback'
+- name: request_type
+  description: opendsr request type
+  default: erasure
+  legal_values:
+    - erasure
+    - portability
+- name: regulation
+  description: opendsr regulation
+  default: gdpr
+  legal_values:
+    - gdpr
+    - ccpa
+- name: callback_enabled
+  description: async webhook callback
+  type: bool
+  default: true
+# identity
+- name: identity_type
+  description: identity Type
+  default: email
+  legal_values:
+    - email
+    - candidate_id
+    - provider_request_id
+    - ios_advertising_id
+    - android_advertising_id
+    - android_id
+- name: identity_format
+  description: identity Format
+  default: raw
+  legal_values:
+    - md5
+    - raw
+    - sha1
+    - sha256
+- name: identity_value
+  description: identity Value
+  default: zzzz@example.com
+
+steps:
+  request:
+    description: Send opendsr request
+    action:
+      type: http
+      configuration:
+        url: '{{.input.url}}'
+        method: POST
+        body: >
+          {
+            "api_version": "2.0",
+            "subject_request_id": "{{.task.resolution_id}}",
+            "subject_request_type": "{{.input.request_type}}",
+            "submitted_time": "{{now}}",
+            "subject_identities": [
+              {
+                "identity_type": "{{.input.identity_type}}",
+                "identity_value": "{{.input.identity_value}}",
+                "identity_format": "{{.input.identity_format}}"
+              }
+            ],
+            "status_callback_url": "{{.input.callback_url_base}}/{{.task.resolution_id}}/callback"
+          }
+
+  callback:
+    description: Wait for remote opendsr callback
+    dependencies: ["request"]
+    action:
+      type: echo
+      configuration:
+        output:
+          metadata: '{{field "resolver_input" "callback" | toJson}}'
+    conditions:
+    - type: skip
+      if:
+      - value: '{{.input.callback_enabled}}'
+        operator: NE
+        expected: true
+      then:
+        this: DONE
+      message: 'sync request and no need to wait for callback'
+    - type: check
+      if:
+      - value: '{{field "resolver_input" "callback" "request_status"}}'
+        operator: NE
+        expected: 'completed'
+      then:
+        this: TO_RETRY
+      message: 'service is waiting for callback from remote opendsr service'
+
+  done:
+    description: notify dsrhub that the opendsr request is done
+    dependencies: ["callback"]
+    action:
+      type: echo
+      configuration:
+        output:
+          done: done

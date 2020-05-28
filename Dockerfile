@@ -1,4 +1,4 @@
-ARG UTASK_VERSION=v1.6.0
+ARG UTASK_VERSION=zz
 FROM ovhcom/utask:${UTASK_VERSION} AS builder
 
 COPY .  /go/src/github.com/ovh/utask
