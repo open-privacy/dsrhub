@@ -19,4 +19,4 @@ docker_build:
 	docker-compose build
 
 docker_run:
-	docker-compose up --remove-orphans --force-recreate
+	docker-compose up --remove-orphans --force-recreate --scale utask=2
