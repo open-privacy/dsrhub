@@ -3,11 +3,11 @@
   expect:
     http:
       method: GET
-      path: /opendsr/discovery
+      path: /:service_name/opendsr/discovery
   actions:
     - reply_http:
         status_code: 200
-        body: >
+        body: >-
           {
             "api_version": "2.0",
             "supported_identities": [
@@ -21,80 +21,99 @@
             "processor_certificate": "https://exampleprocessor.com/cert.pem"
           }
 
+- key: identityResolutionToEmail
+  kind: Behavior
+  expect:
+    http:
+      method: POST
+      path: /:service_name/opendsr/identity_resolution
+    condition: '{{.HTTPPath | contains `email`}}'
+  actions:
+    - reply_http:
+        status_code: 200
+        body: >-
+          {
+            "identity_type": "email",
+            "identity_format": "raw",
+            "identity_value": "john@example.com"
+          }
+
+- key: identityResolutionToCandidateID
+  kind: Behavior
+  expect:
+    http:
+      method: POST
+      path: /:service_name/opendsr/identity_resolution
+    condition: '{{.HTTPPath | contains `candidate`}}'
+  actions:
+    - reply_http:
+        status_code: 200
+        body: >-
+          {
+            "identity_type": "candidate_id",
+            "identity_format": "raw",
+            "identity_value": "candidate_id_abc"
+          }
+
+- key: identityResolutionToProviderRequestID
+  kind: Behavior
+  expect:
+    http:
+      method: POST
+      path: /:service_name/opendsr/identity_resolution
+    condition: '{{.HTTPPath | contains `provider`}}'
+  actions:
+    - reply_http:
+        status_code: 200
+        body: >-
+          {
+            "identity_type": "provider_request_id",
+            "identity_format": "raw",
+            "identity_value": "provider_request_id_xyz"
+          }
+
 - key: createDSR
   kind: Behavior
   expect:
-    condition: '{{ .HTTPBody | jsonPath "regulation" | eq "gdpr" }}'
     http:
       method: POST
-      path: /opendsr/requests
+      path: /:service_name/opendsr/requests
   actions:
     - reply_http:
         status_code: 200
-        body: >
+        body: >-
           {
-            "regulation": "gdpr",
-            "subject_request_id": "a7551968-d5d6-44b2-9831-815ac9017798",
-            "subject_request_type": "erasure",
-            "submitted_time": "2020-04-23T21:52:11.709Z",
-            "subject_identities": [
-              {
-                "identity_type": "email",
-                "idemtity_format": "raw",
-                "identity_value": "johndoe@example.com"
-              }
-            ],
-            "api_version": "2.0",
-            "status_callback_urls": "https://examplecontroller.com/opendsr/callbacks",
-            "extensions": [
-              {
-                "example-processor.com": {
-                  "foo-processor-custom-id": 123456,
-                  "property_id": "123456"
-                }
-              },
-              {
-                "example-other-processor.com": {
-                  "foo-other-processor-custom-id": 654321
-                }
-              }
-            ]
-          }
-    - send_http:
-        url: http://localhost:9999/opendsr/callbacks
-        method: POST
-        body: >
-          {
-            "controller_id": "example_controller_id",
-            "expected_completion_time": "2020-04-23T21:52:11.709Z",
-            "status_callback_urls": ["https://examplecontroller.com/opendsr/callbacks"],
-            "subject_request_id": "a7551968-d5d6-44b2-9831-815ac9017798",
-            "request_status": "pending",
-            "results_url": "https://exampleprocessor.com/secure/d188d4ba-12db-48a0-898c-cd0f8ba7b345",
-            "results_count": 103
+            "controller_id": "{{.HTTPPath}}",
+            "expected_completion_time": "{{now}}",
+            "status_callback_url": "{{.HTTPBody | jsonPath `status_callback_url`}}",
+            "subject_request_id": "{{.HTTPBody | jsonPath `subject_request_id`}}",
+            "request_status": "completed"
           }
 
-- key: handle-callback
-  kind: Behavior
-  expect:
-    http:
-      method: POST
-      path: /opendsr/callbacks
-  actions:
-    - reply_http:
-        status_code: 200
-        body: OK
+    - sleep:
+        duration: 3s
+    - send_http:
+        url: '{{.HTTPBody | jsonPath `status_callback_url`}}'
+        method: POST
+        body: >-
+          {
+            "controller_id": "{{.HTTPPath}}",
+            "expected_completion_time": "{{now}}",
+            "status_callback_url": "{{.HTTPBody | jsonPath `status_callback_url`}}",
+            "subject_request_id": "{{.HTTPBody | jsonPath `subject_request_id`}}",
+            "request_status": "completed"
+          }
 
 - key: getDSR
   kind: Behavior
   expect:
     http:
       method: GET
-      path: /opendsr/requests/:subject_request_id
+      path: /:service_name/opendsr/requests/:subject_request_id
   actions:
     - reply_http:
         status_code: 200
-        body: >
+        body: >-
           {
             "controller_id": "example_controller_id",
             "expected_completion_time": "2020-04-23T21:52:11.709Z",
@@ -110,14 +129,15 @@
   expect:
     http:
       method: DELETE
-      path: /opendsr/requests/:subject_request_id
+      path: /:service_name/opendsr/requests/:subject_request_id
   actions:
     - reply_http:
         status_code: 200
-        body: >
+        body: >-
           {
             "controller_id": "example_controller_id",
             "received_time": "2020-04-23T21:52:11.709Z",
             "subject_request_id": "a7551968-d5d6-44b2-9831-815ac9017798",
             "api_version": "2.0"
           }
+

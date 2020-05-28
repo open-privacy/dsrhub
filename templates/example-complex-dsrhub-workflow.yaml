@@ -1,0 +1,153 @@
+name: example-complex-dsrhub-workflow
+title_format: 'example complex dsrhub workflow'
+description: example complex dsrhub workflow
+auto_runnable: true
+
+inputs:
+- name: email
+  description: email
+  default: zzzz@example.com
+
+steps:
+  start:
+    description: start
+    action:
+      type: tag
+      configuration:
+        tags:
+          email: '{{.input.email}}'
+
+  email_service_a:
+    description: send opendsr request
+    dependencies:
+      - start
+    action:
+      type: subtask
+      configuration:
+        template: opendsr-request
+        input:
+          url: 'http://openmock:9999/email-service-a/opendsr/requests'
+          identity_type: email
+          identity_value: '{{.input.email}}'
+  email_service_b:
+    description: send opendsr request
+    dependencies:
+      - start
+    action:
+      type: subtask
+      configuration:
+        template: opendsr-request
+        input:
+          url: 'http://openmock:9999/email-service-b/opendsr/requests'
+          identity_type: email
+          identity_value: '{{.input.email}}'
+  email_service_c:
+    description: send opendsr request
+    dependencies:
+      - start
+    action:
+      type: subtask
+      configuration:
+        template: opendsr-request
+        input:
+          url: 'http://openmock:9999/email-service-c/opendsr/requests'
+          identity_type: email
+          identity_value: '{{.input.email}}'
+  identity_resolution_candidate_id:
+    description: send opendsr identity resolution
+    dependencies:
+      - start
+    action:
+      type: subtask
+      configuration:
+        template: opendsr-identity-resolution
+        input:
+          url: 'http://openmock:9999/candidate-service-a/opendsr/identity_resolution'
+          identity_type: email
+          identity_value: '{{.input.email}}'
+  candidate_service_a:
+    dependencies:
+      - identity_resolution_candidate_id
+    description: send opendsr request
+    action:
+      type: subtask
+      configuration:
+        template: opendsr-request
+        input:
+          url: 'http://openmock:9999/candidate-service-a/opendsr/requests'
+          identity_type: '{{.step.identity_resolution_candidate_id.output.result.identity_type}}'
+          identity_value: '{{.step.identity_resolution_candidate_id.output.result.identity_value}}'
+  candidate_service_b:
+    dependencies:
+      - identity_resolution_candidate_id
+    description: send opendsr request
+    action:
+      type: subtask
+      configuration:
+        template: opendsr-request
+        input:
+          url: 'http://openmock:9999/candidate-service-b/opendsr/requests'
+          identity_type: '{{.step.identity_resolution_candidate_id.output.result.identity_type}}'
+          identity_value: '{{.step.identity_resolution_candidate_id.output.result.identity_value}}'
+  candidate_service_c:
+    dependencies:
+      - identity_resolution_candidate_id
+    description: send opendsr request
+    action:
+      type: subtask
+      configuration:
+        template: opendsr-request
+        input:
+          url: 'http://openmock:9999/candidate-service-c/opendsr/requests'
+          identity_type: '{{.step.identity_resolution_candidate_id.output.result.identity_type}}'
+          identity_value: '{{.step.identity_resolution_candidate_id.output.result.identity_value}}'
+  candidate_service_d:
+    dependencies:
+      - identity_resolution_candidate_id
+    description: send opendsr request
+    action:
+      type: subtask
+      configuration:
+        template: opendsr-request
+        input:
+          url: 'http://openmock:9999/candidate-service-d/opendsr/requests'
+          identity_type: '{{.step.identity_resolution_candidate_id.output.result.identity_type}}'
+          identity_value: '{{.step.identity_resolution_candidate_id.output.result.identity_value}}'
+  identity_resolution_provider_request_id:
+    description: send opendsr identity resolution
+    dependencies:
+      - start
+    action:
+      type: subtask
+      configuration:
+        template: opendsr-identity-resolution
+        input:
+          url: 'http://openmock:9999/provider-service-a/opendsr/identity_resolution'
+          identity_type: email
+          identity_value: '{{.input.email}}'
+  provider_service_a:
+    dependencies:
+      - identity_resolution_provider_request_id
+    description: send opendsr request
+    action:
+      type: subtask
+      configuration:
+        template: opendsr-request
+        input:
+          url: 'http://openmock:9999/provider-service-a/opendsr/requests'
+          identity_type: '{{.step.identity_resolution_provider_request_id.output.result.identity_type}}'
+          identity_value: '{{.step.identity_resolution_provider_request_id.output.result.identity_value}}'
+          callback_enabled: false
+  provider_service_b:
+    dependencies:
+      - identity_resolution_provider_request_id
+    description: send opendsr request
+    action:
+      type: subtask
+      configuration:
+        template: opendsr-request
+        input:
+          url: 'http://openmock:9999/provider-service-b/opendsr/requests'
+          identity_type: '{{.step.identity_resolution_provider_request_id.output.result.identity_type}}'
+          identity_value: '{{.step.identity_resolution_provider_request_id.output.result.identity_value}}'
+

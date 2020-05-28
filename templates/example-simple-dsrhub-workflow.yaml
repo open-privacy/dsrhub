@@ -1,6 +1,7 @@
-name: example-dsrhub-workflow
-title_format: DSRHub workflow
-description: DSRHub workflow
+name: example-simple-dsrhub-workflow
+title_format: example simple dsrhub workflow
+description: example simple dsrhub workflow
+auto_runnable: true
 
 inputs:
 - name: identity_type
@@ -24,22 +25,17 @@ inputs:
   description: Identity Value
   default: zzzz@example.com
 
-resolver_inputs:
-- name: service_b_callback_state
-  description: service b callback state
-  default: pending
-
 steps:
-  getTime:
+  get_time:
     description: Get UTC time
     action:
       type: http
       configuration:
         url: http://worldclockapi.com/api/json/utc/now
         method: GET
-  getUser:
+  get_user:
     description: Get user
-    dependencies: ["getTime"]
+    dependencies: ["get_time"]
     custom_states: [NOT_FOUND]
     action:
       type: http
@@ -49,7 +45,7 @@ steps:
     conditions:
     - type: check
       if:
-      - value: '{{.step.getUser.metadata.HTTPStatus}}'
+      - value: '{{.step.get_user.metadata.HTTPStatus}}'
         operator: EQ
         expected: '404'
       then:
@@ -57,7 +53,7 @@ steps:
       message: 'User {{.input.identity_value}} not found'
   createUser:
     description: Create the user
-    dependencies: ["getUser:NOT_FOUND"]
+    dependencies: ["get_user:NOT_FOUND"]
     action:
       type: http
       configuration:
@@ -65,9 +61,9 @@ steps:
         method: POST
         body: |-
           {"email":"{{.input.identity_value}}"}
-  getUserCopy:
+  get_user_copy:
     description: Get user
-    dependencies: ["getTime"]
+    dependencies: ["get_time"]
     custom_states: [NOT_FOUND]
     action:
       type: http
@@ -77,15 +73,15 @@ steps:
     conditions:
     - type: check
       if:
-      - value: '{{.step.getUserCopy.metadata.HTTPStatus}}'
+      - value: '{{.step.get_user_copy.metadata.HTTPStatus}}'
         operator: EQ
         expected: '404'
       then:
         this: NOT_FOUND
       message: 'User {{.input.identity_value}} not found'
-  createUserCopy:
+  create_user_copy:
     description: Create the user
-    dependencies: ["getUserCopy:NOT_FOUND"]
+    dependencies: ["get_user_copy:NOT_FOUND"]
     action:
       type: http
       configuration:
@@ -93,55 +89,66 @@ steps:
         method: POST
         body: |-
           {"email":"{{.input.identity_value}}"}
-  mapEmailToCandidateID:
+
+  resolve_email_to_candidate_id:
     description: Map email to candidate_id
-    dependencies: ["getTime"]
+    dependencies: ["get_time"]
     action:
       type: http
       configuration:
         url: http://openmock:9999/users/found
         method: GET
-  deleteServiceA:
+
+  microservice_a_delete:
     description: Delete candidate_id from service A
-    dependencies: ["mapEmailToCandidateID"]
+    dependencies: ["resolve_email_to_candidate_id"]
     action:
       type: http
       configuration:
-        url: http://openmock:9999/service_a/users/candidate_id/{{.step.mapEmailToCandidateID.output.candidate_id}}
+        url: http://openmock:9999/service_a/users/candidate_id/{{.step.resolve_email_to_candidate_id.output.candidate_id}}
         method: DELETE
 
-  deleteServiceBEmail:
+  microservice_a_done:
+    description: notify service B deletion
+    dependencies: ["microservice_a_delete"]
+    action:
+      type: echo
+      configuration:
+        output:
+          hello: world
+
+  microservice_b_delete:
     description: Delete email from service B
-    dependencies: ["getTime"]
+    dependencies: ["get_time"]
     action:
       type: http
       configuration:
         url: 'http://openmock:9999/service_b/users/email/{{.input.identity_value}}'
         method: DELETE
-        body: 'http://utask:8081/resolution/{{.task.resolution_id}}/reinstitute'
+        body: 'http://utask:8081/resolution/{{.task.resolution_id}}/microservice_b_callback'
         headers:
         - name: x-callback-url
-          value: 'http://utask:8081/resolution/{{.task.resolution_id}}/reinstitute'
-  waitServiceBCallback:
+          value: 'http://utask:8081/dsrhub/callback/{{.task.resolution_id}}/microservice_b_callback'
+  microservice_b_callback:
     description: Wait for service B callback
-    dependencies: ["getTime", "deleteServiceBEmail"]
+    dependencies: ["get_time", "microservice_b_delete"]
     action:
       type: echo
       configuration:
         output:
-          state: '{{.resolver_input.service_b_callback_state}}'
+          metadata: '{{field "resolver_input" "microservice_b_callback" "request_status"}}'
     conditions:
     - type: check
       if:
-      - value: '{{.resolver_input.service_b_callback_state}}'
+      - value: '{{field "resolver_input" "microservice_b_callback" "request_status"}}'
         operator: NE
         expected: 'done'
       then:
         this: TO_RETRY
       message: 'service B is pending'
-  notifyServiceBDeletion:
+  microservice_b_done:
     description: notify service B deletion
-    dependencies: ["waitServiceBCallback"]
+    dependencies: ["microservice_b_callback"]
     action:
       type: echo
       configuration:
