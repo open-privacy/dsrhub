@@ -14,7 +14,7 @@ import (
 	"github.com/wI2L/fizz"
 )
 
-var Plugin = NewDSRHubCallbackPlugin()
+var Plugin = NewDSRHubCallbackPlugin() // nolint
 
 type DSRHubCallbackPlugin struct{}
 
