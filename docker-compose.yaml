@@ -31,6 +31,6 @@ services:
     image: checkr/openmock
     restart: on-failure
     volumes:
-      - "./mocks/swagger/templates:/data/templates"
+      - "./mocks:/data/templates"
     ports:
       - "9999:9999"
