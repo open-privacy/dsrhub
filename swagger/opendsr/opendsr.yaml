@@ -67,7 +67,7 @@ paths:
                 type: array
                 items:
                   type: string
-                example: https://examplecontroller.com/opendsr/callbacks
+                  example: https://examplecontroller.com/opendsr/callbacks
       responses:
         201:
           description: request created
@@ -113,11 +113,17 @@ paths:
                 enum: [pending, in_progress, completed, cancelled]
                 example: pending
         400:
-          $ref: '#/definitions/Error'
+          description: invalid input
+          schema:
+            $ref: '#/definitions/Error'
         403:
-          $ref: '#/definitions/Error'
+          description: unauthorized access
+          schema:
+            $ref: '#/definitions/Error'
         500:
-          $ref: '#/definitions/Error'
+          description: internal server error
+          schema:
+            $ref: '#/definitions/Error'
 
   /callbacks:
     post:
@@ -175,14 +181,23 @@ paths:
         201:
           description: OK response for the callbacks
           schema:
-            type: string
-            example: "OK"
+            type: object
+            properties:
+              message:
+                type: string
+                example: "OK"
         400:
-          $ref: '#/definitions/Error'
+          description: invalid input
+          schema:
+            $ref: '#/definitions/Error'
         403:
-          $ref: '#/definitions/Error'
+          description: unauthorized access
+          schema:
+            $ref: '#/definitions/Error'
         500:
-          $ref: '#/definitions/Error'
+          description: internal server error
+          schema:
+            $ref: '#/definitions/Error'
 
 definitions:
   ApiVersion:
@@ -215,7 +230,7 @@ definitions:
         example: email
       idemtity_format:
         type: string
-        description: string value representing the encoding of the identity
+        description: string value representing the encoding of the identity.
         enum:
           - md5
           - raw
@@ -228,8 +243,10 @@ definitions:
         example: johndoe@example.com
   Error:
     type: object
+    description: error message
     properties:
       error:
         type: string
         description: String description of the issue that was encountered.
         example: subject_request_id field is required.
+
