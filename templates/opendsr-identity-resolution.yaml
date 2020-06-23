@@ -14,20 +14,9 @@ inputs:
 - name: identity_type
   description: identity type
   default: email
-  legal_values:
-    - email
-    - candidate_id
-    - ios_advertising_id
-    - android_advertising_id
-    - android_id
 - name: identity_format
   description: identity format
   default: raw
-  legal_values:
-    - md5
-    - raw
-    - sha1
-    - sha256
 - name: identity_value
   description: identity value
   default: zzzz@example.com

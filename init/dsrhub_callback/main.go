@@ -33,14 +33,20 @@ func (p *DSRHubCallbackPlugin) Init(service *plugins.Service) error {
 }
 
 type inCallback struct {
-	ResolutionID           string `path:"resolution_id" validate:"required"`
-	StepName               string `path:"step_name" validate:"required"`
-	ControllerID           string `json:"controller_id" validate:"required"`
-	ExpectedCompletionTime string `json:"expected_completion_time"`
-	SubjectRequestID       string `json:"subject_request_id" validate:"required"`
-	RequestStatus          string `json:"request_status" validate:"required"`
-	ResultsURL             string `json:"results_url"`
-	ResultsCount           int    `json:"results_count"`
+	// dsrhub related fields
+	ResolutionID string `path:"resolution_id" validate:"required"`
+	StepName     string `path:"step_name" validate:"required"`
+
+	// opendsr related fields
+	APIVersion         string `json:"api_version"`
+	Regulation         string `json:"regulation" validate:"required"`
+	ControllerID       string `json:"controller_id" validate:"required"`
+	RequestStatus      string `json:"request_status" validate:"required"`
+	SubjectRequestID   string `json:"subject_request_id" validate:"required"`
+	SubjectRequestType string `json:"subject_request_type" validate:"required"`
+	IdentityType       string `json:"identity_type"`
+	IdentityFormat     string `json:"identity_format"`
+	IdentityValue      string `json:"identity_value"`
 }
 
 func (p *DSRHubCallbackPlugin) handleCallbackFunc() func(c *gin.Context, in *inCallback) error {
@@ -68,7 +74,10 @@ func (p *DSRHubCallbackPlugin) handleCallbackFunc() func(c *gin.Context, in *inC
 			in.StepName: in,
 		})
 
-		logrus.WithField("resolution_id", r.PublicID).Debug("update resolution resolver_input from DSRHubCallbackPlugin")
+		logrus.WithFields(logrus.Fields{
+			"resolution_id": in.ResolutionID,
+			"controller_id": in.ControllerID,
+		}).Debug("update resolution resolver_input from DSRHubCallbackPlugin")
 
 		if err := r.Update(dbp); err != nil {
 			dbp.Rollback()

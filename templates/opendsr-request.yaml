@@ -42,23 +42,11 @@ inputs:
 - name: identity_type
   description: identity Type
   default: email
-  legal_values:
-    - email
-    - candidate_id
-    - provider_request_id
-    - ios_advertising_id
-    - android_advertising_id
-    - android_id
 - name: identity_format
   description: identity Format
   default: raw
-  legal_values:
-    - md5
-    - raw
-    - sha1
-    - sha256
 - name: identity_value
-  description: identity Value
+  description: identity value
   default: zzzz@example.com
 
 steps:
@@ -74,14 +62,9 @@ steps:
             "api_version": "2.0",
             "subject_request_id": "{{.task.resolution_id}}",
             "subject_request_type": "{{.input.request_type}}",
-            "submitted_time": "{{now}}",
-            "subject_identities": [
-              {
-                "identity_type": "{{.input.identity_type}}",
-                "identity_value": "{{.input.identity_value}}",
-                "identity_format": "{{.input.identity_format}}"
-              }
-            ],
+            "identity_type": "{{.input.identity_type}}",
+            "identity_format": "{{.input.identity_format}}",
+            "identity_value": "{{.input.identity_value}}",
             "status_callback_url": "{{.input.callback_url_base}}/{{.task.resolution_id}}/callback"
           }
 
