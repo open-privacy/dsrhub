@@ -58,16 +58,20 @@ paths:
                 example: a7551968-d5d6-44b2-9831-815ac9017798
               subject_request_type:
                 $ref: '#/definitions/SubjectRequestType'
-              subject_identities:
-                type: array
-                description: array of Identity objects
-                items:
-                  $ref: '#/definitions/Identity'
-              status_callback_urls:
-                type: array
-                items:
-                  type: string
-                  example: https://examplecontroller.com/opendsr/callbacks
+              identity_type:
+                type: string
+                description: string value representing the form of identity.
+                example: email
+              idemtity_format:
+                type: string
+                description: string value representing the encoding of the identity.
+                example: raw
+              identity_value:
+                type: string
+                example: johndoe@example.com
+              status_callback_url:
+                type: string
+                example: https://examplecontroller.com/opendsr/callbacks
       responses:
         201:
           description: request created
@@ -98,11 +102,17 @@ paths:
                 example: a7551968-d5d6-44b2-9831-815ac9017798
               subject_request_type:
                 $ref: '#/definitions/SubjectRequestType'
-              subject_identities:
-                type: array
-                description: array of Identity objects
-                items:
-                  $ref: '#/definitions/Identity'
+              identity_type:
+                type: string
+                description: string value representing the form of identity.
+                example: email
+              idemtity_format:
+                type: string
+                description: string value representing the encoding of the identity.
+                example: raw
+              identity_value:
+                type: string
+                example: johndoe@example.com
               controller_id:
                 type: string
                 description: string indicating the unique identity of the Controller in the Processor’s system.
@@ -163,11 +173,17 @@ paths:
                 example: a7551968-d5d6-44b2-9831-815ac9017798
               subject_request_type:
                 $ref: '#/definitions/SubjectRequestType'
-              subject_identities:
-                type: array
-                description: array of Identity objects
-                items:
-                  $ref: '#/definitions/Identity'
+              identity_type:
+                type: string
+                description: string value representing the form of identity.
+                example: email
+              idemtity_format:
+                type: string
+                description: string value representing the encoding of the identity.
+                example: raw
+              identity_value:
+                type: string
+                example: johndoe@example.com
               controller_id:
                 type: string
                 description: string indicating the unique identity of the Controller in the Processor’s system.
@@ -209,38 +225,6 @@ definitions:
       string value representing the type of OpenDSR Request. Supported values: "erasure", "portability", "access"
     enum: [access, portability, erasure]
     example: erasure
-  Identity:
-    type: object
-    properties:
-      identity_type:
-        type: string
-        description: string value representing the form of identity.
-        enum:
-          - android_advertising_id
-          - android_id
-          - controller_customer_id
-          - email
-          - fire_advertising_id
-          - ios_advertising_id
-          - ios_vendor_id
-          - microsoft_advertising_id
-          - microsoft_publisher_id
-          - roku_advertising_id
-          - roku_publisher_id
-        example: email
-      idemtity_format:
-        type: string
-        description: string value representing the encoding of the identity.
-        enum:
-          - md5
-          - raw
-          - sha1
-          - sha256
-        example: raw
-      identity_value:
-        type: string
-        description: string value representing the identity.
-        example: johndoe@example.com
   Error:
     type: object
     description: error message
