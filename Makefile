@@ -22,8 +22,8 @@ docker_run:
 
 gen_proto:
 	docker run --rm \
-      -v $(PWD)/proto/dsrhub:/defs \
-      -v $(PWD)/proto/dsrhub:/go/src/github.com/dsrhub/dsrhub/proto/dsrhub \
+      -v $(PWD)/idl_dsrhub:/defs \
+      -v $(PWD)/idl_dsrhub:/go/src/github.com/dsrhub/dsrhub/idl_dsrhub \
       namely/protoc-all:1.11 -i . -d . -l go -o /go/src
 
 _install_cmd_golangci_lint:

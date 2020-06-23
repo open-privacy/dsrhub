@@ -1,7 +1,7 @@
 syntax = "proto3";
 
-package dsrhub.opendsr;
-option go_package = "github.com/dsrhub/dsrhub/proto/dsrhub/opendsr";
+package idl.dsrhub;
+option go_package = "github.com/dsrhub/dsrhub/idl_dsrhub";
 
 message CreateDSRRequest {
   string api_version              = 1; /// e.g. "2.0"
