@@ -19,6 +19,10 @@ var (
 	)
 )
 
+const (
+	defaultTimeoutSeconds = 10
+)
+
 // DsrHubGRPCConfig is the configuration needed to perform an gRPC client side call
 type DsrHubGRPCConfig struct {
 	URL     string                      `json:"url"`
@@ -31,14 +35,8 @@ func validConfig(config interface{}) error {
 	if cfg.URL == "" {
 		return fmt.Errorf("invalid dsrhub_grpc config url: empty url")
 	}
-	if cfg.Request.ApiVersion == "" {
-		return fmt.Errorf("invalid dsrhub_grpc config request.api_version: empty request.api_version")
-	}
 	if cfg.Request.Regulation != "gdpr" && cfg.Request.Regulation != "ccpa" {
 		return fmt.Errorf("invalid dsrhub_grpc config request.regulation: %s, want: [gdpr, ccpa]", cfg.Request.Regulation)
-	}
-	if cfg.Request.StatusCallbackUrl == "" {
-		return fmt.Errorf("invalid dsrhub_grpc config request.status_callback_url: empty request.status_callback_url")
 	}
 	if cfg.Request.SubjectRequestId == "" {
 		return fmt.Errorf("invalid dsrhub_grpc config request.subject_request_id: empty request.subject_request_id")
@@ -62,6 +60,9 @@ func exec(stepName string, config interface{}, execCtx interface{}) (output inte
 	}
 	defer conn.Close()
 
+	if cfg.Timeout == 0 {
+		cfg.Timeout = defaultTimeoutSeconds
+	}
 	ctx, cancel := context.WithDeadline(
 		context.TODO(),
 		time.Now().Add(time.Duration(cfg.Timeout)*time.Second),
