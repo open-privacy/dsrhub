@@ -17,6 +17,19 @@ steps:
         tags:
           email: '{{.input.email}}'
 
+  example_grpc:
+    description: send a grpc CreateDSR request
+    action:
+      type: dsrhub_grpc
+      configuration:
+        url: 'openmock:50051'
+        request:
+          api_version: '2.0'
+          regulation: 'gdpr'
+          subject_request_id: '{{.task.resolution_id}}'
+          subject_request_type: 'email'
+          identity_value: '{{.input.email}}'
+
   email_service_a:
     description: send opendsr request
     dependencies:

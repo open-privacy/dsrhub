@@ -5,6 +5,7 @@
 *.so
 *.dylib
 /dsrhub
+/mocks/mocks
 
 # Test binary, built with `go test -c`
 *.test

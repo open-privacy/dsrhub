@@ -18,7 +18,7 @@ docker_build:
 	docker-compose build
 
 docker_run:
-	docker-compose up --remove-orphans --force-recreate --scale utask=2
+	docker-compose up --remove-orphans --force-recreate
 
 gen_proto:
 	docker run --rm \

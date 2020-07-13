@@ -1,4 +1,4 @@
-ARG UTASK_IMAGE=zhouzhuojie/utask
+ARG UTASK_IMAGE=ovhcom/utask:v1.8.1
 
 FROM ${UTASK_IMAGE} AS builder
 WORKDIR /go/src/github.com/ovh/utask
