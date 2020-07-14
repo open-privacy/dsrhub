@@ -1,16 +1,16 @@
-name: opendsr-identity-resolution
-title_format: 'opendsr-identity-resolution {{.input.url}}'
-description: opendsr identity resolution
+name: dsrhub_http_exchange_identity
+title_format: 'dsrhub_http_exchange_identity {{.input.url}}'
+description: dsrhub exchange identity
 auto_runnable: true
 result_format:
-  identity_type: '{{.step.identity_resolution.output.identity_type}}'
-  identity_format: '{{.step.identity_resolution.output.identity_format}}'
-  identity_value: '{{.step.identity_resolution.output.identity_value}}'
+  identity_type: '{{.step.exchange_identity.output.identity_type}}'
+  identity_format: '{{.step.exchange_identity.output.identity_format}}'
+  identity_value: '{{.step.exchange_identity.output.identity_value}}'
 
 inputs:
 - name: url
-  description: request url
-  default: 'http://openmock:9999/service-candidate-id/opendsr/identity_resolution'
+  description: http exchange_identity url
+  default: 'http://openmock:9999/service-candidate-id/dsrhub/exchange_identity'
 - name: identity_type
   description: identity type
   default: email
@@ -22,7 +22,7 @@ inputs:
   default: zzzz@example.com
 
 steps:
-  identity_resolution:
+  exchange_identity:
     description: Map incoming identity to the service's supported identity type
     action:
       type: http

@@ -1,7 +1,8 @@
-version: "3.8"
+version: "2.4"
 services:
   utask:
     build: .
+    container_name: dsrhub_utask
     restart: on-failure
     command: ["/wait-for-it.sh", "db:5432", "--", "/app/utask"]
     environment:
@@ -15,11 +16,13 @@ services:
     ports:
       - "8081:8081"
     volumes:
-      - "./templates:/app/templates:ro"
+      - "./templates:/app/templates"
     depends_on:
       - db
+
   db:
     image: postgres:9.5.3
+    container_name: dsrhub_db
     restart: on-failure
     environment:
       POSTGRES_USER:     user
@@ -27,8 +30,10 @@ services:
       POSTGRES_DB:       utask
     volumes:
       - "./sql:/docker-entrypoint-initdb.d"
+
   openmock:
     build: ./mocks
+    container_name: dsrhub_openmock
     restart: on-failure
     environment:
       OPENMOCK_TEMPLATES_DIR: '/data/templates'
@@ -39,3 +44,9 @@ services:
     ports:
       - "9999:9999"
       - "50051:50051"
+
+  functional_test:
+    image: zhouzhuojie/docker-venom
+    container_name: dsrhub_functional_test
+    entrypoint: ''
+    command: sh -c "tail -F /dev/null"

@@ -17,3 +17,5 @@ vendor/
 go.mod
 go.sum
 Makefile
+docker-compose.yaml
+/.circleci

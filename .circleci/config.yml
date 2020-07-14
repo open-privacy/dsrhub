@@ -1,14 +1,23 @@
 version: 2
 jobs:
-  unittest:
+  unit_test:
     docker:
       - image: circleci/golang:1.14
     steps:
       - checkout
       - run: make test
+  functional_test:
+    docker:
+      - image: checkr/docker-docker-compose
+    steps:
+      - checkout
+      - setup_remote_docker:
+          version: 18.09.3
+      - run: make docker_functional_test
 
 workflows:
   version: 2
   test:
     jobs:
-      - unittest
+      - unit_test
+      - functional_test

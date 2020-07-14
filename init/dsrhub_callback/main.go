@@ -37,8 +37,7 @@ type inCallback struct {
 	ResolutionID string `path:"resolution_id" validate:"required"`
 	StepName     string `path:"step_name" validate:"required"`
 
-	// opendsr related fields
-	APIVersion         string `json:"api_version"`
+	// dsrhub related fields
 	Regulation         string `json:"regulation" validate:"required"`
 	ControllerID       string `json:"controller_id" validate:"required"`
 	RequestStatus      string `json:"request_status" validate:"required"`

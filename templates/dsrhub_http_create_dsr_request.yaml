@@ -1,6 +1,6 @@
-name: opendsr-request
-title_format: 'opendsr-request {{.input.url}}'
-description: opendsr request
+name: dsrhub_http_create_dsr_request
+title_format: 'dsrhub_http_create_dsr_requestd {{.input.url}}'
+description: dsrhub http request (sync and async)
 auto_runnable: true
 result_format:
   controller_id: >-
@@ -15,21 +15,21 @@ result_format:
   input: '{{.input | toJson}}'
 
 inputs:
-# remote opendsr request
+# remote dsrhub request
 - name: url
-  description: request url
-  default: 'http://openmock:9999/service-candidate-id/opendsr/requests'
+  description: dsrhub create_dsr_request url
+  default: 'http://openmock:9999/service-candidate-id/dsrhub/create_dsr_request'
 - name: callback_url_base
   description: callback url base
   default: 'http://utask:8081/dsrhub/callback'
 - name: request_type
-  description: opendsr request type
+  description: dsrhub request type
   default: erasure
   legal_values:
     - erasure
     - portability
 - name: regulation
-  description: opendsr regulation
+  description: dsrhub regulation
   default: gdpr
   legal_values:
     - gdpr
@@ -51,7 +51,7 @@ inputs:
 
 steps:
   request:
-    description: Send opendsr request
+    description: Send dsrhub request
     action:
       type: http
       configuration:
@@ -59,7 +59,6 @@ steps:
         method: POST
         body: >
           {
-            "api_version": "2.0",
             "subject_request_id": "{{.task.resolution_id}}",
             "subject_request_type": "{{.input.request_type}}",
             "identity_type": "{{.input.identity_type}}",
@@ -69,7 +68,7 @@ steps:
           }
 
   callback:
-    description: Wait for remote opendsr callback
+    description: Wait for remote dsrhub callback
     dependencies: ["request"]
     action:
       type: echo
@@ -92,10 +91,10 @@ steps:
         expected: 'completed'
       then:
         this: TO_RETRY
-      message: 'service is waiting for callback from remote opendsr service'
+      message: 'service is waiting for callback from remote dsrhub service'
 
   done:
-    description: notify dsrhub that the opendsr request is done
+    description: notify dsrhub that the dsrhub request is done
     dependencies: ["callback"]
     action:
       type: echo
