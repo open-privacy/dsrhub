@@ -23,7 +23,7 @@ option (grpc.gateway.protoc_gen_swagger.options.openapiv2_swagger) = {
 message CreateDSRRequest {
   option (grpc.gateway.protoc_gen_swagger.options.openapiv2_schema) = {
     json_schema: {
-      required: ["regulation", "subject_request_id", "subject_request_type", "identity_value"]
+      required: ["regulation", "subjectRequestId", "subjectRequestType", "identityValue"]
     }
   };
 
@@ -50,7 +50,7 @@ message CreateDSRResponse {
 message ExchangeIdentityRequest {
   option (grpc.gateway.protoc_gen_swagger.options.openapiv2_schema) = {
     json_schema: {
-      required: ["identity_value"]
+      required: ["identityValue"]
     }
   };
 

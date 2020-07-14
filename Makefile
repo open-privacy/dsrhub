@@ -9,7 +9,7 @@ vendor:
 
 lint: _install_cmd_golangci_lint _install_cmd_swagger
 	golangci-lint run -D errcheck -E golint $(src-dirs)
-	swagger validate $(PWD)/idl_dsrhub/swagger_opendsr.yaml
+	swagger validate $(PWD)/idl_dsrhub/dsrhub.swagger.json
 
 test: lint
 	go test -race -covermode=atomic $(src-dirs)

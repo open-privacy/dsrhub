@@ -111,9 +111,9 @@
       },
       "required": [
         "regulation",
-        "subject_request_id",
-        "subject_request_type",
-        "identity_value"
+        "subjectRequestId",
+        "subjectRequestType",
+        "identityValue"
       ]
     },
     "dsrhubCreateDSRResponse": {
@@ -159,7 +159,7 @@
         }
       },
       "required": [
-        "identity_value"
+        "identityValue"
       ]
     },
     "dsrhubExchangeIdentityResponse": {
