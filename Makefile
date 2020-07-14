@@ -25,7 +25,7 @@ gen_proto:
       -v $(PWD)/idl_dsrhub:/defs \
       -v $(PWD)/idl_dsrhub:/go/src/github.com/dsrhub/dsrhub/idl_dsrhub \
       -v $(PWD)/idl_dsrhub/dsrhub.swagger.json:/go/src/dsrhub.swagger.json \
-      namely/protoc-all:1.29_2 -i . -d . -l go -o /go/src --with-gateway --with-swagger-json-names
+      namely/protoc-all:1.29_2 -i . -d . -l go -o /go/src --with-gateway
 
 _install_cmd_golangci_lint:
 ifndef CMD_GOLANGCILINT
