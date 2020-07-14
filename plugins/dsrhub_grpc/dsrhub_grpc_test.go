@@ -16,7 +16,6 @@ func TestValidConfig(t *testing.T) {
 	cfg = DsrHubGRPCConfig{
 		URL: "localhost:50051",
 		Request: idl_dsrhub.CreateDSRRequest{
-			ApiVersion:         "2.0",
 			Regulation:         "gdpr",
 			StatusCallbackUrl:  "http://localhost:9999/dsrhub/callback",
 			SubjectRequestId:   "123456",
