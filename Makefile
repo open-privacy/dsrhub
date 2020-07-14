@@ -9,7 +9,7 @@ vendor:
 
 lint: _install_cmd_golangci_lint _install_cmd_swagger
 	golangci-lint run -D errcheck -E golint $(src-dirs)
-	swagger validate $(PWD)/idl_dsrhub/swagger_opendsr.yaml
+	swagger validate $(PWD)/idl_dsrhub/dsrhub.swagger.json
 
 test: lint
 	go test -race -covermode=atomic $(src-dirs)
@@ -24,7 +24,8 @@ gen_proto:
 	docker run --rm \
       -v $(PWD)/idl_dsrhub:/defs \
       -v $(PWD)/idl_dsrhub:/go/src/github.com/dsrhub/dsrhub/idl_dsrhub \
-      namely/protoc-all:1.11 -i . -d . -l go -o /go/src
+      -v $(PWD)/idl_dsrhub/dsrhub.swagger.json:/go/src/dsrhub.swagger.json \
+      namely/protoc-all:1.29_2 -i . -d . -l go -o /go/src --with-gateway --with-swagger-json-names
 
 _install_cmd_golangci_lint:
 ifndef CMD_GOLANGCILINT

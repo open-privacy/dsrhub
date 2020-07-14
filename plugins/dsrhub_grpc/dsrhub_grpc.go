@@ -69,7 +69,7 @@ func exec(stepName string, config interface{}, execCtx interface{}) (output inte
 	)
 	defer cancel()
 
-	res, err := idl_dsrhub.NewOpenDSRServiceClient(conn).CreateDSR(ctx, &cfg.Request)
+	res, err := idl_dsrhub.NewDSRHubServiceClient(conn).CreateDSR(ctx, &cfg.Request)
 	if err != nil {
 		return nil, nil, err
 	}
