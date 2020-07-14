@@ -50,7 +50,7 @@ func main() {
 	om := &openmock.OpenMock{}
 	om.ParseEnv()
 	om.GRPCServiceMap = map[string]openmock.GRPCService{
-		"idl.dsrhub.OpenDSRService": {
+		"idl.dsrhub.DSRHubService": {
 			"CreateDSR": openmock.GRPCRequestResponsePair{
 				Request:  proto.MessageV2(&idl_dsrhub.CreateDSRRequest{}),
 				Response: proto.MessageV2(&idl_dsrhub.CreateDSRResponse{}),

@@ -1,0 +1,23 @@
+name: TestSuite of dsrhub's openmock
+testcases:
+- name: Make sure openmock is ready to serve POST /:service/dsrhub/exchange_identity
+  steps:
+  - type: http
+    method: POST
+    url: http://openmock:9999/test_email_service/dsrhub/exchange_identity
+    retry: 20
+    delay: 5
+    assertions:
+    - result.statuscode ShouldEqual 200
+    - result.body ShouldContainSubstring email
+
+- name: Make sure openmock is ready to serve POST /:service_name/dsrhub/create_dsr_request
+  steps:
+  - type: http
+    method: POST
+    url: http://openmock:9999/test_email_service/dsrhub/create_dsr_request
+    retry: 20
+    delay: 5
+    assertions:
+    - result.statuscode ShouldEqual 200
+    - result.body ShouldContainSubstring email

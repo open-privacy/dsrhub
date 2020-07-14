@@ -1,15 +1,14 @@
-- key: opendsr_grpc
+- key: dsrhub_grpc
   expect:
     grpc:
-      service: idl.dsrhub.OpenDSRService
+      service: idl.dsrhub.DSRHubService
       method: CreateDSR
   actions:
     - reply_grpc:
         payload: >
           {
-            "api_version": "2.0",
             "regulation": "gdpr",
-            "controller_id": "opendsr_grpc_mock",
+            "controller_id": "dsrhub_grpc_mock",
             "request_status": "completed",
             "subject_request_id": "{{.GRPCPayload | jsonPath `subject_request_id`}}",
             "subject_request_type": "erasure",

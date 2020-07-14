@@ -3,7 +3,7 @@
   expect:
     http:
       method: POST
-      path: /:service_name/opendsr/identity_resolution
+      path: /:service_name/dsrhub/exchange_identity
     condition: '{{.HTTPPath | contains `email`}}'
   actions:
     - reply_http:
@@ -20,7 +20,7 @@
   expect:
     http:
       method: POST
-      path: /:service_name/opendsr/identity_resolution
+      path: /:service_name/dsrhub/exchange_identity
     condition: '{{.HTTPPath | contains `candidate`}}'
   actions:
     - reply_http:
@@ -37,7 +37,7 @@
   expect:
     http:
       method: POST
-      path: /:service_name/opendsr/identity_resolution
+      path: /:service_name/dsrhub/exchange_identity
     condition: '{{.HTTPPath | contains `provider`}}'
   actions:
     - reply_http:
@@ -54,13 +54,12 @@
   expect:
     http:
       method: POST
-      path: /:service_name/opendsr/requests
+      path: /:service_name/dsrhub/create_dsr_request
   actions:
     - reply_http:
         status_code: 200
         body: >-
           {
-            "api_version": "2.0",
             "regulation": "gdpr",
             "controller_id": "{{ .HTTPPath }}",
             "request_status": "completed",
@@ -78,7 +77,6 @@
         method: POST
         body: >-
           {
-            "api_version": "2.0",
             "regulation": "gdpr",
             "controller_id": "{{ .HTTPPath }}",
             "request_status": "completed",

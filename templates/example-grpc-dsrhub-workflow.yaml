@@ -24,7 +24,6 @@ steps:
       configuration:
         url: 'openmock:50051'
         request:
-          api_version: '2.0'
           regulation: 'gdpr'
           subject_request_id: '{{.task.resolution_id}}'
           subject_request_type: 'email'

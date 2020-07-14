@@ -1,0 +1,46 @@
+name: TestSuite of dsrhub's utask
+testcases:
+- name: getUnsecuredStats
+  steps:
+  - type: http
+    method: GET
+    url: http://utask:8081/unsecured/stats
+    retry: 20
+    delay: 5
+    headers:
+      accept: application/json
+    assertions:
+    - result.statuscode ShouldEqual 200
+
+- name: createTask
+  steps:
+  - type: http
+    method: POST
+    url: http://utask:8081/task
+    retry: 10
+    delay: 5
+    headers:
+      Content-Type: application/json
+      Authorization: Basic YWRtaW46MTIzNA== # admin:1234
+    body: >
+      {
+        "template_name": "example-complex-dsrhub-workflow",
+        "input": {"email":"zzzz@example.com"}
+      }
+    assertions:
+    - result.statuscode ShouldEqual 201
+    - result.bodyjson.state ShouldEqual TODO
+
+- name: getTaskState
+  steps:
+  - type: http
+    method: GET
+    url: http://utask:8081/task/{{.createTask.result.bodyjson.id}}
+    retry: 60
+    delay: 2
+    headers:
+      Content-Type: application/json
+      Authorization: Basic YWRtaW46MTIzNA== # admin:1234
+    assertions:
+    - result.statuscode ShouldEqual 200
+    - result.bodyjson.state ShouldEqual DONE
