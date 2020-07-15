@@ -24,10 +24,7 @@ func (p *DSRHubInitPlugin) setupMetrics() error {
 		tracer.WithService(p.StatsdAPMServiceName),
 	)
 
-	ginEngine := router.Engine()
-	ginEngine.Use(gintrace.Middleware(
-		fmt.Sprintf("%s-http-server", p.StatsdAPMServiceName),
-	))
+	router.Use(gintrace.Middleware(fmt.Sprintf("%s-http-server", p.StatsdAPMServiceName)))
 
 	return nil
 }
