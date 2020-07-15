@@ -35,7 +35,8 @@ func (p *DSRHubInitPlugin) setupHTTPCallback() error {
 		return fmt.Errorf("failed to load router in plugin: %s", p.Description())
 	}
 
-	router.POST("/dsrhub/callback/:resolution_id/:step_name",
+	router.POST(
+		fmt.Sprintf("%s/:resolution_id/:step_name", p.HTTPCallbackBaseURL),
 		[]fizz.OperationOption{fizz.Summary("Handle dsrhub webhook callback.")},
 		tonic.Handler(p.handleCallbackFunc(), 200),
 	)

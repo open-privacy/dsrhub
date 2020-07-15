@@ -8,7 +8,8 @@ import (
 var Plugin = NewDSRHubInitPlugin() // nolint
 
 type DSRHubInitPlugin struct {
-	// StatsdEnabled - enable statsd metrics and/or datadog APM
+	// Environment variables
+	HTTPCallbackBaseURL  string `env:"DSRHUB_HTTP_CALLBACK_BASE_URL" envDefault:"/dsrhub/callback"`
 	StatsdEnabled        bool   `env:"STATSD_ENABLED" envDefault:"false"`
 	StatsdHost           string `env:"STATSD_HOST" envDefault:"127.0.0.1"`
 	StatsdPort           string `env:"STATSD_PORT" envDefault:"8125"`
