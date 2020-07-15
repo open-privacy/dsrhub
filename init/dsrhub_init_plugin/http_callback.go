@@ -9,30 +9,11 @@ import (
 	"github.com/loopfz/gadgeto/zesty"
 	"github.com/ovh/utask"
 	"github.com/ovh/utask/models/resolution"
-	"github.com/ovh/utask/pkg/plugins"
 	"github.com/sirupsen/logrus"
 	"github.com/wI2L/fizz"
 )
 
-var Plugin = NewDSRHubCallbackPlugin() // nolint
-
-type DSRHubCallbackPlugin struct{}
-
-func NewDSRHubCallbackPlugin() plugins.InitializerPlugin { return &DSRHubCallbackPlugin{} }
-func (p *DSRHubCallbackPlugin) Description() string      { return "DSRHub Callback Plugin" }
-
-func (p *DSRHubCallbackPlugin) Init(service *plugins.Service) error {
-	router, ok := service.Server.Handler(context.Background()).(*fizz.Fizz)
-	if !ok {
-		return fmt.Errorf("failed to load router in plugin: %s", p.Description())
-	}
-	router.POST("/dsrhub/callback/:resolution_id/:step_name",
-		[]fizz.OperationOption{fizz.Summary("Handle dsrhub webhook callback.")},
-		tonic.Handler(p.handleCallbackFunc(), 200))
-	return nil
-}
-
-type inCallback struct {
+type httpCallback struct {
 	// dsrhub related fields
 	ResolutionID string `path:"resolution_id" validate:"required"`
 	StepName     string `path:"step_name" validate:"required"`
@@ -48,8 +29,21 @@ type inCallback struct {
 	IdentityValue      string `json:"identity_value"`
 }
 
-func (p *DSRHubCallbackPlugin) handleCallbackFunc() func(c *gin.Context, in *inCallback) error {
-	return func(c *gin.Context, in *inCallback) error {
+func (p *DSRHubInitPlugin) setupHTTPCallback() error {
+	router, ok := p.service.Server.Handler(context.Background()).(*fizz.Fizz)
+	if !ok {
+		return fmt.Errorf("failed to load router in plugin: %s", p.Description())
+	}
+
+	router.POST("/dsrhub/callback/:resolution_id/:step_name",
+		[]fizz.OperationOption{fizz.Summary("Handle dsrhub webhook callback.")},
+		tonic.Handler(p.handleCallbackFunc(), 200),
+	)
+	return nil
+}
+
+func (p *DSRHubInitPlugin) handleCallbackFunc() func(c *gin.Context, in *httpCallback) error {
+	return func(c *gin.Context, in *httpCallback) error {
 		dbp, err := zesty.NewDBProvider(utask.DBName)
 		if err != nil {
 			return err
@@ -76,7 +70,7 @@ func (p *DSRHubCallbackPlugin) handleCallbackFunc() func(c *gin.Context, in *inC
 		logrus.WithFields(logrus.Fields{
 			"resolution_id": in.ResolutionID,
 			"controller_id": in.ControllerID,
-		}).Debug("update resolution resolver_input from DSRHubCallbackPlugin")
+		}).Debug("update resolution resolver_input from DSRHubInitPlugin")
 
 		if err := r.Update(dbp); err != nil {
 			dbp.Rollback()
