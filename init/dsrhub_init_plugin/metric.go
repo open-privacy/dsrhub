@@ -21,7 +21,7 @@ func (p *DSRHubInitPlugin) setupMetrics() error {
 
 	tracer.Start(
 		tracer.WithAgentAddr(fmt.Sprintf("%s:%s", p.StatsdHost, p.StatsdAPMPort)),
-		tracer.WithServiceName(p.StatsdAPMServiceName),
+		tracer.WithService(p.StatsdAPMServiceName),
 	)
 
 	ginEngine := router.Engine()
