@@ -1,4 +1,4 @@
-<img src="docs/logo.svg" width="100%" height="168">
+<img src="docs/logo.svg" width="100%" height="200">
 
 <p align="center">
     <a href="https://goreportcard.com/report/github.com/dsrhub/dsrhub" target="_blank">
