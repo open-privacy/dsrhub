@@ -5,8 +5,10 @@ import (
 	"github.com/ovh/utask/pkg/plugins"
 )
 
+// Plugin is exposed go plugin variable that we can use in uTask
 var Plugin = NewDSRHubInitPlugin() // nolint
 
+// DSRHubInitPlugin is a plugin config struct.
 type DSRHubInitPlugin struct {
 	// Environment variables
 	HTTPCallbackBaseURL  string `env:"DSRHUB_HTTP_CALLBACK_BASE_URL" envDefault:"/dsrhub/callback"`
@@ -22,14 +24,17 @@ type DSRHubInitPlugin struct {
 	service *plugins.Service
 }
 
+// NewDSRHubInitPlugin creates a new DSRHubInitPlugin
 func NewDSRHubInitPlugin() plugins.InitializerPlugin {
 	return &DSRHubInitPlugin{}
 }
 
+// Description is the description
 func (p *DSRHubInitPlugin) Description() string {
 	return "DSRHubInitPlugin"
 }
 
+// Init setup the plugin by extending the official plugins.Service
 func (p *DSRHubInitPlugin) Init(service *plugins.Service) error {
 	if err := env.Parse(p); err != nil {
 		return err
