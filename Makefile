@@ -26,7 +26,7 @@ docker_functional_test:
 	docker-compose up --no-start
 	for f in ./mocks/openmock_templates/*.yaml; do docker cp $$f dsrhub_openmock:/data/templates/; done
 	for f in ./sql/schema.sql;                  do docker cp $$f dsrhub_db:/docker-entrypoint-initdb.d/; done
-	for f in ./templates/*.yaml;                do docker cp $$f dsrhub_utask:/app/templates/; done
+	for f in ./templates/*.yaml;                do docker cp $$f dsrhub_dsrhub:/app/templates/; done
 	for f in ./functional_test/*.yaml;          do docker cp $$f dsrhub_functional_test:/var/local/; done
 	docker-compose up -d
 	docker-compose exec -w /var/local functional_test venom run --log info '*'
