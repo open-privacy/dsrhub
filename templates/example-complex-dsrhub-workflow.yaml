@@ -41,6 +41,7 @@ steps:
           url: 'http://openmock:9999/email-service-a/dsrhub/create_dsr_request'
           identity_type: email
           identity_value: '{{.input.email}}'
+
   email_service_b:
     description: send dsrhub request
     dependencies:
@@ -53,6 +54,7 @@ steps:
           url: 'http://openmock:9999/email-service-b/dsrhub/create_dsr_request'
           identity_type: email
           identity_value: '{{.input.email}}'
+
   email_service_c:
     description: send dsrhub request
     dependencies:
@@ -65,6 +67,7 @@ steps:
           url: 'http://openmock:9999/email-service-c/dsrhub/create_dsr_request'
           identity_type: email
           identity_value: '{{.input.email}}'
+
   exchange_identity_candidate_id:
     description: send dsrhub exhange identity
     dependencies:
@@ -77,6 +80,7 @@ steps:
           url: 'http://openmock:9999/candidate-service-a/dsrhub/exchange_identity'
           identity_type: email
           identity_value: '{{.input.email}}'
+
   candidate_service_a:
     dependencies:
       - exchange_identity_candidate_id
@@ -89,6 +93,7 @@ steps:
           url: 'http://openmock:9999/candidate-service-a/dsrhub/create_dsr_request'
           identity_type: '{{.step.exchange_identity_candidate_id.output.result.identity_type}}'
           identity_value: '{{.step.exchange_identity_candidate_id.output.result.identity_value}}'
+
   candidate_service_b:
     dependencies:
       - exchange_identity_candidate_id
@@ -101,6 +106,7 @@ steps:
           url: 'http://openmock:9999/candidate-service-b/dsrhub/create_dsr_request'
           identity_type: '{{.step.exchange_identity_candidate_id.output.result.identity_type}}'
           identity_value: '{{.step.exchange_identity_candidate_id.output.result.identity_value}}'
+
   candidate_service_c:
     dependencies:
       - exchange_identity_candidate_id
@@ -113,6 +119,7 @@ steps:
           url: 'http://openmock:9999/candidate-service-c/dsrhub/create_dsr_request'
           identity_type: '{{.step.exchange_identity_candidate_id.output.result.identity_type}}'
           identity_value: '{{.step.exchange_identity_candidate_id.output.result.identity_value}}'
+
   candidate_service_d:
     dependencies:
       - exchange_identity_candidate_id
@@ -125,6 +132,7 @@ steps:
           url: 'http://openmock:9999/candidate-service-d/dsrhub/create_dsr_request'
           identity_type: '{{.step.exchange_identity_candidate_id.output.result.identity_type}}'
           identity_value: '{{.step.exchange_identity_candidate_id.output.result.identity_value}}'
+
   exchange_identity_provider_request_id:
     description: send dsrhub exchange identity
     dependencies:
@@ -137,6 +145,7 @@ steps:
           url: 'http://openmock:9999/provider-service-a/dsrhub/exchange_identity'
           identity_type: email
           identity_value: '{{.input.email}}'
+
   provider_service_a:
     dependencies:
       - exchange_identity_provider_request_id
@@ -150,6 +159,7 @@ steps:
           identity_type: '{{.step.exchange_identity_provider_request_id.output.result.identity_type}}'
           identity_value: '{{.step.exchange_identity_provider_request_id.output.result.identity_value}}'
           callback_enabled: false
+
   provider_service_b:
     dependencies:
       - exchange_identity_provider_request_id
