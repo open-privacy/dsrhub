@@ -22,3 +22,5 @@ require (
 	gopkg.in/DataDog/dd-trace-go.v1 v1.25.0
 	gopkg.in/check.v1 v1.0.0-20200227125254-8fa46927fb4f // indirect
 )
+
+replace github.com/ovh/utask => github.com/dsrhub/utask v1.6.1-0.20200717024527-e0b43581b183

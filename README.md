@@ -43,7 +43,8 @@ Workflow orchestration (thanks to [uTask](https://github.com/ovh/utask)).
 ## Run with docker-compose
 
 ```sh
-$ wget https://raw.githubusercontent.com/dsrhub/dsrhub/master/docker-compose.example.yaml
+$ git clone https://github.com/dsrhub/dsrhub.git
+$ cd dsrhub
 $ docker-compose up -f docker-compose.example.yaml
 ```
 

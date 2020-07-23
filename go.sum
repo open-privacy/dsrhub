@@ -50,6 +50,8 @@ github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/dgrijalva/jwt-go v3.2.0+incompatible/go.mod h1:E3ru+11k8xSBh+hMPgOLZmtrrCbhqsmaPHjLKYnJCaQ=
 github.com/dgryski/go-sip13 v0.0.0-20181026042036-e10d5fee7954/go.mod h1:vAd38F8PWV+bWy6jNmig1y/TA+kYO4g3RSRF0IAv0no=
+github.com/dsrhub/utask v1.6.1-0.20200717024527-e0b43581b183 h1:6gPKkpcfM4Wk8BGGN4kAnW6jFszGfKxGh1zN1rGwzWE=
+github.com/dsrhub/utask v1.6.1-0.20200717024527-e0b43581b183/go.mod h1:FCwrg391A4STNSOOhAaTSOA0Zaos7Iaw/aU02F76L0U=
 github.com/envoyproxy/go-control-plane v0.9.0/go.mod h1:YTl/9mNaCwkRvm6d1a2C3ymFceY/DCBVvsKhRF0iEA4=
 github.com/envoyproxy/go-control-plane v0.9.1-0.20191026205805-5f8ba28d4473/go.mod h1:YTl/9mNaCwkRvm6d1a2C3ymFceY/DCBVvsKhRF0iEA4=
 github.com/envoyproxy/go-control-plane v0.9.4/go.mod h1:6rpuAdCZL397s3pYoYcLgu1mIlRU8Am5FuJP05cCM98=
@@ -244,8 +246,6 @@ github.com/ovh/go-ovh v0.0.0-20181109152953-ba5adb4cf014/go.mod h1:joRatxRJaZBsY
 github.com/ovh/symmecrypt v0.4.3 h1:kuoiMNrcqYn2Rdn4w86KfW0fpZLSZBRUKTJT40EAyhk=
 github.com/ovh/symmecrypt v0.4.3/go.mod h1:39tehz0mgJfrpQOGUMf5J29rK1GzPiTxLFiVuk9XPO0=
 github.com/ovh/tat v5.2.5+incompatible/go.mod h1:eRL842a3T+2ept8tEg5IxitkGJL6X8wh1JkRa9DNzo0=
-github.com/ovh/utask v1.8.0 h1:vF0FLYCmu2N5+uXD7XwWRasyvgWVukmjqkpTE3DXDQE=
-github.com/ovh/utask v1.8.0/go.mod h1:FCwrg391A4STNSOOhAaTSOA0Zaos7Iaw/aU02F76L0U=
 github.com/pelletier/go-toml v1.2.0/go.mod h1:5z9KED0ma1S8pY6P1sdut58dfprrGBbd/94hg7ilaic=
 github.com/pelletier/go-toml v1.4.0 h1:u3Z1r+oOXJIkxqw34zVhyPgjBsm6X2wn21NWs/HfSeg=
 github.com/pelletier/go-toml v1.4.0/go.mod h1:PN7xzY2wHTK0K9p34ErDQMlFxa51Fk0OUruD3k1mMwo=

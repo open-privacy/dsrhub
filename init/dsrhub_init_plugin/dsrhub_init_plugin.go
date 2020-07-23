@@ -42,12 +42,12 @@ func (p *DSRHubInitPlugin) Init(service *plugins.Service) error {
 
 	p.service = service
 
-	if err := p.setupHTTPCallback(); err != nil {
-		return err
-	}
 	if err := p.setupMetrics(); err != nil {
 		return err
 	}
 
+	if err := p.setupHTTPCallback(); err != nil {
+		return err
+	}
 	return nil
 }
