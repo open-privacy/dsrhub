@@ -18,7 +18,7 @@ type DSRHubInitPlugin struct {
 	StatsdPrefix         string `env:"STATSD_PREFIX" envDefault:"dsrhub."`
 	StatsdAPMEnabled     bool   `env:"STATSD_APM_ENABLED" envDefault:"false"`
 	StatsdAPMPort        string `env:"STATSD_APM_PORT" envDefault:"8126"`
-	StatsdAPMServiceName string `env:"STATSD_APM_SERVICE_NAME" envDefault:"dsrhub"`
+	StatsdAPMServiceName string `env:"DD_SERVICE" envDefault:"dsrhub"`
 
 	// utask init plugin's Service entrypoint
 	service *plugins.Service
