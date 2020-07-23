@@ -13,11 +13,10 @@ func (p *DSRHubInitPlugin) setupMetrics() error {
 	}
 
 	p.service.Server.WithCustomMiddlewares(
-		gintrace.Middleware(fmt.Sprintf("%s-http-server", p.StatsdAPMServiceName)))
+		gintrace.Middleware(p.StatsdAPMServiceName))
 
 	tracer.Start(
 		tracer.WithAgentAddr(fmt.Sprintf("%s:%s", p.StatsdHost, p.StatsdAPMPort)),
-		tracer.WithService(p.StatsdAPMServiceName),
 	)
 
 	return nil
