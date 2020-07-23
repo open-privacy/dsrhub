@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 
+	"github.com/sirupsen/logrus"
 	gintrace "gopkg.in/DataDog/dd-trace-go.v1/contrib/gin-gonic/gin"
 	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 )
@@ -15,7 +16,10 @@ func (p *DSRHubInitPlugin) setupMetrics() error {
 	p.service.Server.WithCustomMiddlewares(
 		gintrace.Middleware(p.StatsdAPMServiceName))
 
+	logrus.Info("starting metrics and tracer reporting")
+
 	tracer.Start(
+		tracer.WithDebugMode(true),
 		tracer.WithAgentAddr(fmt.Sprintf("%s:%s", p.StatsdHost, p.StatsdAPMPort)),
 	)
 
