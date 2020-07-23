@@ -20,7 +20,7 @@
 # Introduction
 DSRHub is an open platform for DSR (Data Subject Requests). It helps to orchestrate the workflow of privacy related compliance processes (e.g. GDPR/CCPA) among your microservices. 
 
-DSRHub was built to ease the pain of managing microservices' data privacy related processes. The best practice of microservices is that data should be owned by the service. This adds complexity to managing personal identifiable information (PII) at scale, because usually the APIs of hanlding the PII data is not standardized.
+DSRHub was built to ease the pain of managing microservices' data privacy related processes. The best practice of microservices is that data should be owned by the service. This adds complexity to managing personal identifiable information (PII) at scale, because usually the APIs of the microservices that handle the PII data are not standardized.
 
 The goal of DSRHub is to extract the common logic of handling data subject requests within the microservices ecosystem into standard APIs and workflows. It ships a gRPC/swagger based API specification for your services and an YAML DSL workflow to orchestrate the data subject requests in a declarative manner.
 
