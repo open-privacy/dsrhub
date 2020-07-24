@@ -16,10 +16,10 @@ func (p *DSRHubInitPlugin) setupMetrics() error {
 	p.service.Server.WithCustomMiddlewares(
 		gintrace.Middleware(p.StatsdAPMServiceName))
 
-	logrus.Info("starting metrics and tracer reporting")
+	logrus.Info("starting DSRHubInitPlugin tracer metrics...")
 
 	tracer.Start(
-		tracer.WithDebugMode(true),
+		tracer.WithAnalytics(true),
 		tracer.WithAgentAddr(fmt.Sprintf("%s:%s", p.StatsdHost, p.StatsdAPMPort)),
 	)
 
