@@ -1,0 +1,4 @@
+postgres:
+  dialect: postgres
+  datasource: ${CFG_DATABASE}
+  dir: /app/sql/migrations
