@@ -19,6 +19,17 @@ services:
       - "./templates:/app/templates"
     depends_on:
       - db
+      - migrate
+
+  migrate:
+    build: .
+    container_name: dsrhub_migrate
+    command: ["/wait-for-it.sh", "db:5432", "--", "sql-migrate", "up", "-env", "postgres"]
+    environment:
+      CFG_DATABASE: 'postgres://user:pass@db/utask?sslmode=disable'
+    restart: on-failure
+    depends_on:
+      - db
 
   db:
     image: postgres:9.5.3
@@ -28,8 +39,6 @@ services:
       POSTGRES_USER:     user
       POSTGRES_PASSWORD: pass
       POSTGRES_DB:       utask
-    volumes:
-      - "./sql:/docker-entrypoint-initdb.d"
 
   openmock:
     build: ./mocks
