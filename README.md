@@ -48,7 +48,13 @@ $ cd dsrhub
 $ docker-compose up -f docker-compose.example.yaml
 ```
 
-If you want to deploy dsrhub, please make sure the PostgreSQL database is up with the updated schema from `./sql/schema.sql`.
+If you want to deploy dsrhub, please make sure the PostgreSQL database is up with the updated schema. One can also run the following command to do database migrations.
+
+```sh
+$ docker run -it dsrhub/dsrhub \
+    -e 'CFG_DATABASE=postgres://user:pass@db/utask?sslmode=disable' \
+    sql-migrate up -env postgres
+```
 
 # Architecture
 
@@ -133,10 +139,47 @@ $ open "http://localhost:8081/ui/dashboard/#/new"
 ```
 
 # Config and Customization
-WIP
 
-# Metrics and Monitoring
-WIP
+## Environment Variables
+
+Example of the environment variables you can set. The config keys and values
+are documented from [utask config](https://github.com/ovh/utask/blob/master/config/README.md).
+
+```sh
+# Example of using the environment variables
+$ docker run -it dsrhub/dsrhub \
+    -e 'CONFIGURATION_FROM=env:CFG'
+    -e 'CFG_DATABASE=postgres://user:pass@db/utask?sslmode=disable'
+```
+
+```yaml
+######## uTask server environment variables ########
+CONFIGURATION_FROM: 'env:CFG'                                                  # sample configuration prefix
+CFG_DATABASE:       'postgres://user:pass@db/utask?sslmode=disable'            # sample connection to the pg database
+CFG_UTASK_CFG:      '{"admin_usernames":["admin"],"application_name":"µTask"}' # sample utask config
+CFG_BASIC_AUTH:     '{"admin":"1234","resolver":"3456","regular":"5678"}'      # sample basic auth for admin access
+CFG_ENCRYPTION_KEY: '{"identifier":"storage","cipher":"aes-gcm","timestamp":1535627466,"key":"e5f45aef9f072e91f735547be63f3434e6de49695b178e3868b23b0e32269800"}' # sample encryption key, please change it before any deployment
+
+INIT:               './init'            # init plugins folder
+PLUGINS:            './plugins'         # regular plugins folder
+TEMPLATES:          './templates'       # templates folder
+FUNCTIONS:          './functions'       # functions folder
+SCRIPTS:            './script'          # scripts folder
+REGION:             'default'           # region, e.g. us-east-1
+SERVER_PORT:        '8081'              # server port
+DEBUG:              'false'             # to toggle the debug logs
+MAINTENANCE_MODE:   'false'             # maintenance mode for key rotation
+
+######## dsrhub init plugin configuration ##########
+DSRHUB_HTTP_CALLBACK_BASE_URL: '/dsrhub/callback'  # the endpoint that dsrhub can listen on HTTP webhook callback from async style of http pattern
+STATSD_ENABLED:                'false'             # enable the statsd metrics reporting, e.g. to datadog
+STATSD_HOST:                   '127.0.0.1'         # statsd host
+STATSD_PORT:                   '8125'              # statsd port
+STATSD_PREFIX:                 'dsrhub.'           # statsd prefix of the metrics
+STATSD_APM_ENABLED:            'false'             # datadog apm enabled or not
+STATSD_APM_PORT:               '8126'              # datadog apm port
+DD_SERVICE:                    'dsrhub'            # datadog DD_SERVICE as the service name
+```
 
 # License
 - [dsrhub/dsrhub](https://github.com/dsrhub/dsrhub): [Apache-2.0 License](https://github.com/dsrhub/dsrhub/blob/master/LICENSE)
