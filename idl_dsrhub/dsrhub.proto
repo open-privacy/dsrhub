@@ -27,9 +27,10 @@ message CreateDSRResponse {
 }
 
 message ExchangeIdentityRequest {
-  string identity_type   = 1; /// e.g. "email", "controller_customer_id", "android_id"
-  string identity_format = 2; /// e.g. "md5", "raw", "sha1", "sha256"
-  string identity_value  = 3; /// e.g. "zzzz@example.com", if multiple, one can use a separator like ','
+  string identity_type        = 1; /// e.g. "email", "controller_customer_id", "android_id"
+  string identity_format      = 2; /// e.g. "md5", "raw", "sha1", "sha256"
+  string identity_value       = 3; /// e.g. "zzzz@example.com", if multiple, one can use a separator like ','
+  string target_identity_type = 4; /// if the service supports exchanging multiple types of identity, it's useful to specify the target identity type.
 }
 
 message ExchangeIdentityResponse {
