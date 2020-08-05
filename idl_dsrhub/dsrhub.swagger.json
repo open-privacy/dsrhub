@@ -143,6 +143,9 @@
         },
         "identity_value": {
           "type": "string"
+        },
+        "target_identity_type": {
+          "type": "string"
         }
       }
     },
