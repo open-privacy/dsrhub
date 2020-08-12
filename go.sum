@@ -244,8 +244,8 @@ github.com/ovh/go-ovh v0.0.0-20181109152953-ba5adb4cf014/go.mod h1:joRatxRJaZBsY
 github.com/ovh/symmecrypt v0.4.3 h1:kuoiMNrcqYn2Rdn4w86KfW0fpZLSZBRUKTJT40EAyhk=
 github.com/ovh/symmecrypt v0.4.3/go.mod h1:39tehz0mgJfrpQOGUMf5J29rK1GzPiTxLFiVuk9XPO0=
 github.com/ovh/tat v5.2.5+incompatible/go.mod h1:eRL842a3T+2ept8tEg5IxitkGJL6X8wh1JkRa9DNzo0=
-github.com/ovh/utask v1.8.3-0.20200724093550-a596736e7b3c h1:xdbQcYAgTttwCJtK+Ak+WoI1rix7e8GRjVnMhM200Fg=
-github.com/ovh/utask v1.8.3-0.20200724093550-a596736e7b3c/go.mod h1:FCwrg391A4STNSOOhAaTSOA0Zaos7Iaw/aU02F76L0U=
+github.com/ovh/utask v1.8.3 h1:C0i/gW5xt03Ixyl+UKxwKvSCdV7JkhW0nDgRF7yo938=
+github.com/ovh/utask v1.8.3/go.mod h1:FCwrg391A4STNSOOhAaTSOA0Zaos7Iaw/aU02F76L0U=
 github.com/pelletier/go-toml v1.2.0/go.mod h1:5z9KED0ma1S8pY6P1sdut58dfprrGBbd/94hg7ilaic=
 github.com/pelletier/go-toml v1.4.0 h1:u3Z1r+oOXJIkxqw34zVhyPgjBsm6X2wn21NWs/HfSeg=
 github.com/pelletier/go-toml v1.4.0/go.mod h1:PN7xzY2wHTK0K9p34ErDQMlFxa51Fk0OUruD3k1mMwo=
