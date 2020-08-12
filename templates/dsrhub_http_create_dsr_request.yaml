@@ -1,5 +1,5 @@
 name: dsrhub_http_create_dsr_request
-title_format: 'dsrhub_http_create_dsr_requestd {{.input.url}}'
+title_format: 'dsrhub_http_create_dsr_requestd'
 description: dsrhub http request (sync and async)
 auto_runnable: true
 result_format:
