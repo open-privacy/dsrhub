@@ -1,5 +1,5 @@
 name: dsrhub_http_exchange_identity
-title_format: 'dsrhub_http_exchange_identity {{.input.url}}'
+title_format: 'dsrhub_http_exchange_identity'
 description: dsrhub exchange identity
 auto_runnable: true
 result_format:
@@ -20,6 +20,9 @@ inputs:
 - name: identity_value
   description: identity value
   default: zzzz@example.com
+- name: target_identity_type
+  description: target identity type
+  default: email
 
 steps:
   exchange_identity:
@@ -33,5 +36,6 @@ steps:
           {
             "identity_type": "{{.input.identity_type}}",
             "identity_format": "{{.input.identity_format}}",
-            "identity_value": "{{.input.identity_value}}"
+            "identity_value": "{{.input.identity_value}}",
+            "target_identity_type": "{{.input.target_identity_type}}"
           }
