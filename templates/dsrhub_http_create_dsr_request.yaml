@@ -92,12 +92,3 @@ steps:
       then:
         this: TO_RETRY
       message: 'service is waiting for callback from remote dsrhub service'
-
-  done:
-    description: notify dsrhub that the dsrhub request is done
-    dependencies: ["callback"]
-    action:
-      type: echo
-      configuration:
-        output:
-          done: done

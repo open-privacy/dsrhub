@@ -41,13 +41,9 @@ services:
       POSTGRES_DB:       utask
 
   openmock:
-    build: ./mocks
+    image: dsrhub/mock
     container_name: dsrhub_openmock
     restart: on-failure
-    environment:
-      OPENMOCK_TEMPLATES_DIR: '/data/templates'
-      OPENMOCK_GRPC_ENABLED: 'true'
-      OPENMOCK_GRPC_PORT: '50051'
     volumes:
       - "./mocks/openmock_templates:/data/templates"
     ports:

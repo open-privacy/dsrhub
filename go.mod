@@ -12,7 +12,7 @@ require (
 	github.com/loopfz/gadgeto v0.10.1
 	github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e // indirect
 	github.com/opentracing/opentracing-go v1.2.0 // indirect
-	github.com/ovh/utask v1.8.3-0.20200724093550-a596736e7b3c
+	github.com/ovh/utask v1.8.3
 	github.com/philhofer/fwd v1.0.0 // indirect
 	github.com/sirupsen/logrus v1.6.0
 	github.com/stretchr/testify v1.5.1
