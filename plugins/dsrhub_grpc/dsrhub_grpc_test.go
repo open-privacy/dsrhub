@@ -8,12 +8,12 @@ import (
 )
 
 func TestValidConfig(t *testing.T) {
-	var cfg DsrHubGRPCConfig
+	var cfg DSRHubGRPCConfig
 
-	cfg = DsrHubGRPCConfig{}
+	cfg = DSRHubGRPCConfig{}
 	assert.Error(t, validConfig(&cfg))
 
-	cfg = DsrHubGRPCConfig{
+	cfg = DSRHubGRPCConfig{
 		URL: "localhost:50051",
 		Request: idl_dsrhub.CreateDSRRequest{
 			Regulation:         "gdpr",

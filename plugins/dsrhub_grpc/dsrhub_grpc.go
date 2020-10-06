@@ -5,9 +5,11 @@ import (
 	"fmt"
 	"time"
 
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/metadata"
+
 	"github.com/dsrhub/dsrhub/idl_dsrhub"
 	"github.com/ovh/utask/pkg/plugins/taskplugin"
-	"google.golang.org/grpc"
 )
 
 var (
@@ -15,7 +17,7 @@ var (
 	// nolint
 	Plugin = taskplugin.New(
 		"dsrhub_grpc", "1.0", exec,
-		taskplugin.WithConfig(validConfig, DsrHubGRPCConfig{}),
+		taskplugin.WithConfig(validConfig, DSRHubGRPCConfig{}),
 	)
 )
 
@@ -23,15 +25,16 @@ const (
 	defaultTimeoutSeconds = 10
 )
 
-// DsrHubGRPCConfig is the configuration needed to perform an gRPC client side call
-type DsrHubGRPCConfig struct {
+// DSRHubGRPCConfig is the configuration needed to perform an gRPC client side call
+type DSRHubGRPCConfig struct {
 	URL     string                      `json:"url"`
 	Request idl_dsrhub.CreateDSRRequest `json:"request"`
 	Timeout int                         `json:"timeout,omitempty"` // timeout in seconds
+	Header  map[string]string           `json:"header,omitempty"`
 }
 
 func validConfig(config interface{}) error {
-	cfg := config.(*DsrHubGRPCConfig)
+	cfg := config.(*DSRHubGRPCConfig)
 	if cfg.URL == "" {
 		return fmt.Errorf("invalid dsrhub_grpc config url: empty url")
 	}
@@ -50,8 +53,8 @@ func validConfig(config interface{}) error {
 	return nil
 }
 
-func exec(stepName string, config interface{}, execCtx interface{}) (output interface{}, metadata interface{}, err error) {
-	cfg := config.(*DsrHubGRPCConfig)
+func exec(stepName string, config interface{}, execCtx interface{}) (output interface{}, _ interface{}, err error) {
+	cfg := config.(*DSRHubGRPCConfig)
 
 	// TODO: support secure connection with configuration
 	conn, err := grpc.Dial(cfg.URL, grpc.WithInsecure())
@@ -69,7 +72,8 @@ func exec(stepName string, config interface{}, execCtx interface{}) (output inte
 	)
 	defer cancel()
 
-	res, err := idl_dsrhub.NewDSRHubServiceClient(conn).CreateDSR(ctx, &cfg.Request)
+	header := metadata.New(cfg.Header)
+	res, err := idl_dsrhub.NewDSRHubServiceClient(conn).CreateDSR(ctx, &cfg.Request, grpc.Header(&header))
 	if err != nil {
 		return nil, nil, err
 	}
