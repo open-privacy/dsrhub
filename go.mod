@@ -5,7 +5,7 @@ go 1.14
 require (
 	github.com/DataDog/datadog-go v3.7.2+incompatible // indirect
 	github.com/caarlos0/env v3.5.0+incompatible
-	github.com/gin-gonic/gin v1.6.3
+	github.com/gin-gonic/gin v1.7.7
 	github.com/golang/protobuf v1.4.0
 	github.com/grpc-ecosystem/grpc-gateway v1.14.6
 	github.com/kr/text v0.2.0 // indirect
